@@ -4,23 +4,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TodoList {
-    private static ArrayList<ListEntry> todo;
-    private static ArrayList<ListEntry> crossedOff;
-    private static Scanner scanner;
-    private static ListEntry listEntry;
-
+    private static ArrayList<Entry> todo = new ArrayList<>();
+    private static ArrayList<Entry> crossedOff = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        todo = new ArrayList<>();
-        crossedOff = new ArrayList<>();
-        scanner = new Scanner(System.in);
-        listEntry = new ListEntry();
-
-        new TodoList();
-
-    }
-
-    private TodoList() {
         while (true) {
             System.out.println("what would you like to do [1] add a to do list item, [2] cross off an item [3] "
                     + "show all the items");
@@ -28,29 +16,34 @@ public class TodoList {
             scanner = new Scanner(System.in);
             if (choice == 1) {
                 System.out.println("Enter the item text.");
-                addItem(listEntry, todo);
+                addTodo();
             } else if (choice == 2) {
                 System.out.println("Which item would you like to cross off?");
-                int removing = scanner.nextInt();
-                removeItem(removing);
+                moveItem();
             } else {
-                System.out.println(todo);
+                printLists();
             }
         }
     }
 
-    private void addItem(ListEntry listEntry, ArrayList<ListEntry> list) {
-        String newItem = scanner.nextLine();
-        listEntry.increaseNumber();
-        listEntry.setItem(newItem);
-        listEntry.setStatus(false);
-        list.add(listEntry);
-        //listEntry = new ListEntry();
-
+    public static void addTodo() {
+        Entry entry = new Entry(scanner.next());
+        entry.setNumber(todo.size() + crossedOff.size() + 1);
+        todo.add(entry);
     }
 
-    private void removeItem(int removing) {
+    public static void printLists() {
+        for (Entry e : todo) {
+            System.out.println(e.todoGetItem());
+        }
+        for (Entry e : crossedOff) {
+            System.out.println(e.crossedOffGetItem());
+        }
+    }
+
+    public static void moveItem() {
+        int removing = scanner.nextInt();
+        crossedOff.add(todo.get(removing - 1));
         todo.remove(removing - 1);
     }
-
 }
