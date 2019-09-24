@@ -1,4 +1,4 @@
-package ui;
+package name;
 
 // represents an entry in a list
 public class Entry {
@@ -20,29 +20,42 @@ public class Entry {
         this.number = number;
     }
 
-    //public void setStatus(Entry entry, String status) {
-      //  entry.status = status;
-    //}
+    // MODIFIES: this
+    // EFFECTS: sets the item of the entry to the given string
+    public void setItem(String item) {
+        this.item = item;
+    }
 
+    // MODIFIES: this
+    // EFFECTS: sets the status of the entry to the given string
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+   // EFFECTS: returns the number of the entry it is called on
     public int getNumber() {
         return number;
     }
 
+   // EFFECTS: returns the item of the entry it is called on
     public String getItem() {
         return item;
+    }
+
+    // EFFECTS: returns the status of the entry it is called on
+    public String getStatus() {
+        return status;
     }
 
     // REQUIRES: the entry is in the todo list
     // EFFECTS: returns the number and item of the entry
     public String todoGetEntry() {
-
-        return number + " " + item + " to do";
+        return number + " " + item + " " + status + " (to do)";
     }
 
     // REQUIRES: the entry is in the crossedOff list
     // EFFECTS: returns the number and item of the entry
     public String crossedOffGetEntry() {
-
-        return number + " " + item + " crossed off";
+        return number + " " + item + " " + status + " (crossed off)";
     }
 }

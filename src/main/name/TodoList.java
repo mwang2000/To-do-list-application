@@ -1,4 +1,4 @@
-package ui;
+package name;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,9 +14,9 @@ public class TodoList {
     }
 
     // run the program
-    // MODIFIES: this
-    // EFFECTS:
-    public static void main(String[] args) {
+    // MODIFIES: this, crossedOff
+    // EFFECTS: calls methods according to the functions required by the user
+    public void run() {
         TodoList todo = new TodoList();
         while (true) {
             System.out.println("what would you like to do [1] add a to do list item, [2] cross off an item [3] "
@@ -55,22 +55,28 @@ public class TodoList {
         }
     }
 
-     //MODIFIES: this
-     //EFFECTS: moves the selected item from the todo list to the crossedOff list
+    //MODIFIES: this
+    //EFFECTS: moves the selected item from the todo list to the crossedOff list
     public void moveItem(int removing) {
+        todo.get(removing - 1).setStatus("done");
         crossedOff.add(todo.get(removing - 1));
         todo.remove(removing - 1);
     }
 
+    // EFFECTS: returns the size of the list
     public int size() {
         return todo.size();
     }
 
+    // MODIFIES: this
+    // EFFECTS: inserts an entry into todo
     public void insert(Entry entry) {
         todo.add(entry);
     }
 
+   // EFFECTS: returns true if todo contains the given Entry
     public boolean contains(Entry entry) {
         return todo.contains(entry);
     }
+
 }
