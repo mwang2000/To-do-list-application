@@ -2,11 +2,12 @@ package name;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class TodoList {
-    private static ArrayList<Entry> todo;
-    private static ArrayList<Entry> crossedOff;
-    private static Scanner scanner = new Scanner(System.in);
+    public static ArrayList<Entry> todo;
+    public static ArrayList<Entry> crossedOff;
+    public static Scanner scanner = new Scanner(System.in);
 
     public TodoList() {
         todo = new ArrayList<>();
@@ -15,27 +16,49 @@ public class TodoList {
 
     // run the program
     // MODIFIES: this, crossedOff
-    // EFFECTS: calls methods according to the functions required by the user
-    public void run() {
-        TodoList todo = new TodoList();
+    // EFFECTS: adds and removes entries in todo and crossedOff lists and prints lists according to the functions
+    // required by the user
+    public void run() throws IOException, ClassNotFoundException {
+        todo = Loadable.load();
         while (true) {
-            System.out.println("what would you like to do [1] add a to do list item, [2] cross off an item [3] "
-                    + "show all the items");
-            int choice = scanner.nextInt();
-            scanner = new Scanner(System.in);
+            int choice = welcome();
             if (choice == 1) {
-                System.out.println("Enter the item text.");
-                Entry entry = new Entry(scanner.next());
-                todo.addTodo(entry);
+                Entry entry = promptAddItem();
+                addTodo(entry);
             } else if (choice == 2) {
-                System.out.println("Which item would you like to cross off?");
-                int removing = scanner.nextInt();
-                todo.moveItem(removing);
+                int removing = promptRemoveItem();
+                moveItem(removing);
+            } else if (choice == 3) {
+                printLists();
             } else {
-                todo.printLists();
+                Saveable.save();
+                break;
             }
         }
     }
+
+    //EFFECTS: returns the next integer entered by the user
+    public int promptRemoveItem() {
+        System.out.println("Which item would you like to cross off?");
+        return scanner.nextInt();
+    }
+
+    //EFFECTS: returns the next line the user enters
+    public Entry promptAddItem() {
+        System.out.println("Enter the item text.");
+        return new Entry(scanner.nextLine());
+    }
+
+    //MODIFIES: this
+    //EFFECTS: returns the next integer entered by the user as their choice
+    public int welcome() {
+        System.out.println("what would you like to do: [1] add a to do list item, [2] cross off an item, [3] "
+                + "show all the items, [4] exit");
+        int choice = scanner.nextInt();
+        scanner = new Scanner(System.in);
+        return choice;
+    }
+
 
     // REQUIRES: user has chosen to add an item to the todo list
     // MODIFIES: this
@@ -74,9 +97,10 @@ public class TodoList {
         todo.add(entry);
     }
 
-   // EFFECTS: returns true if todo contains the given Entry
+    // EFFECTS: returns true if todo contains the given Entry
     public boolean contains(Entry entry) {
         return todo.contains(entry);
     }
 
 }
+

@@ -1,7 +1,10 @@
 package name;
 
+import java.io.*;
+import java.util.ArrayList;
+
 // represents an entry in a list
-public class Entry {
+public class Entry implements Serializable, Loadable, Saveable {
     private int number;
     private String item;
     private String status;
