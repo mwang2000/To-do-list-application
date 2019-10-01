@@ -1,5 +1,6 @@
 package placeholder;
 
+import name.Entry;
 import name.Loadable;
 import name.Saveable;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +21,9 @@ public class TestSaveable {
 
     @Test
     void testSave() throws IOException, ClassNotFoundException {
-        Saveable.save();
-        test.equals(Loadable.load());
+        Entry e = new Entry("");
+        e.save();
+        test.equals(e.load());
     }
 
 }

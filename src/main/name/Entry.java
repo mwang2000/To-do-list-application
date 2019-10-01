@@ -61,4 +61,19 @@ public class Entry implements Serializable, Loadable, Saveable {
     public String crossedOffGetEntry() {
         return number + " " + item + " " + status + " (crossed off)";
     }
+
+    public ArrayList<Entry> load() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("file");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        ArrayList<Entry> todo = (ArrayList<Entry>) ois.readObject();
+        ois.close();
+        return todo;
+    }
+
+    public void save() throws IOException {
+        FileOutputStream fos = new FileOutputStream("file");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(TodoList.todo);
+        oos.close();
+    }
 }

@@ -19,7 +19,8 @@ public class TodoList {
     // EFFECTS: adds and removes entries in todo and crossedOff lists and prints lists according to the functions
     // required by the user
     public void run() throws IOException, ClassNotFoundException {
-        todo = Loadable.load();
+        Entry e = new Entry("");
+        todo = e.load();
         while (true) {
             int choice = welcome();
             if (choice == 1) {
@@ -31,7 +32,7 @@ public class TodoList {
             } else if (choice == 3) {
                 printLists();
             } else {
-                Saveable.save();
+                e.save();
                 break;
             }
         }

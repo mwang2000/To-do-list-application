@@ -1,5 +1,6 @@
 package placeholder;
 
+import name.Entry;
 import name.Loadable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ public class TestLoadable {
         FileOutputStream fos = new FileOutputStream("file");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(test);
-        assertEquals(test, Loadable.load());
+        Entry e = new Entry("");
+        assertEquals(test, e.load());
     }
 }
