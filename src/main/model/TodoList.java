@@ -4,14 +4,8 @@ import ui.Main;
 import java.util.ArrayList;
 
 public class TodoList {
-    public static ArrayList<Item> todo;
-    public static ArrayList<Item> crossedOff;
-
-    public TodoList() {
-        todo = new ArrayList<>();
-        crossedOff = new ArrayList<>();
-    }
-
+    public static ArrayList<Item> todo = new ArrayList<>();
+    public static ArrayList<Item> crossedOff = new ArrayList<>();
 
     // EFFECTS: prints the todo list and then the crossed out list
     public static void printLists() {

@@ -37,10 +37,8 @@ public class TestItem {
     public void testSetItem() {
         testTodo.add(entry);
         testTodo.add(entry2);
-        entry.setTask("xyz");
-        entry2.setTask("abc");
-        assertEquals("xyz", entry.getTask());
-        assertEquals("abc", entry2.getTask());
+        assertEquals("abc", entry.getTask());
+        assertEquals("def", entry2.getTask());
     }
 
     @Test

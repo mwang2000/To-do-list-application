@@ -38,6 +38,7 @@ public abstract class Item implements Serializable,Loadable,Saveable {
         this.status = status;
     }
 
+    // REQUIRES: the date given is not in the past
     // MODIFIES: this
     // EFFECTS: sets the due date of the entry to the user input
     public void setDueDate(int y,int m,int d) {
