@@ -1,8 +1,6 @@
 package placeholder;
 
-import name.Entry;
-import name.Loadable;
-import name.Saveable;
+import model.RegularItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +19,7 @@ public class TestSaveable {
 
     @Test
     void testSave() throws IOException, ClassNotFoundException {
-        Entry e = new Entry("");
+        RegularItem e = new RegularItem("");
         e.save();
         test.equals(e.load());
     }

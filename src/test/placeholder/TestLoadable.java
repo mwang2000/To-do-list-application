@@ -1,7 +1,6 @@
 package placeholder;
 
-import name.Entry;
-import name.Loadable;
+import model.RegularItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +26,7 @@ public class TestLoadable {
         FileOutputStream fos = new FileOutputStream("file");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(test);
-        Entry e = new Entry("");
+        RegularItem e = new RegularItem("");
         assertEquals(test, e.load());
     }
 }
