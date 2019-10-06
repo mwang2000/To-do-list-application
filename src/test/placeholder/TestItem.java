@@ -1,7 +1,6 @@
 package placeholder;
 
 import model.Item;
-import model.TodoList;
 import model.UrgentItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

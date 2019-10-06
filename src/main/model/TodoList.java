@@ -1,15 +1,11 @@
 package model;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-import org.w3c.dom.ls.LSOutput;
 import ui.Main;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class TodoList {
     public static ArrayList<Item> todo;
     public static ArrayList<Item> crossedOff;
-    public static Scanner scanner = new Scanner(System.in);
 
     public TodoList() {
         todo = new ArrayList<>();
