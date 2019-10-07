@@ -1,6 +1,8 @@
 package placeholder;
 
+import model.Item;
 import model.RegularItem;
+import model.UrgentItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,13 +14,17 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestLoadable {
-    private ArrayList<String> test;
+    private ArrayList<Item> test;
+    private Item entry;
+    private Item entry2;
 
     @BeforeEach
     public void runBefore() {
         test = new ArrayList<>();
-        test.add("abc");
-        test.add("def");
+        entry = new RegularItem("abc");
+        entry2 = new UrgentItem("def");
+        test.add(entry);
+        test.add(entry2);
     }
 
     @Test

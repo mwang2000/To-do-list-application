@@ -26,7 +26,7 @@ public class TestUrgentItem {
     @Test
     public void testTimeLeft() {
         entry2.setDueDate(2019,10,10);
-        assertEquals(4 , entry2.timeLeft());
+        assertEquals("There are 4 days until this task is due.", entry2.timeLeft());
     }
 
 }

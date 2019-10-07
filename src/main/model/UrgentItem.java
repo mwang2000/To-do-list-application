@@ -8,10 +8,9 @@ public class UrgentItem extends Item {
         super(item);
     }
 
-    public long timeLeft() {
+    public String timeLeft() {
         LocalDate today = LocalDate.now();
         long difference = ChronoUnit.DAYS.between(today,dueDate);
-        System.out.println("There are " + difference + " days until this task is due.");
-        return difference;
+        return "There are " + difference + " days until this task is due.";
     }
 }

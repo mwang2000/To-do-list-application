@@ -53,7 +53,7 @@ public class Main {
 
     public static Item loadTodo() throws IOException, ClassNotFoundException {
         Item e = new RegularItem("");
-        todo = e.load();
+//        todo = e.load();
         return e;
     }
 
