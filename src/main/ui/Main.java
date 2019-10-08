@@ -43,7 +43,7 @@ public class Main {
             } else if (choice == 3) {
                 move();
             } else if (choice == 4) {
-                TodoList.printLists();
+                printLists();
             } else {
                 e.save();
                 break;
@@ -53,7 +53,7 @@ public class Main {
 
     public static Item loadTodo() throws IOException, ClassNotFoundException {
         Item e = new RegularItem("");
-//        todo = e.load();
+        todo = e.load();
         return e;
     }
 
@@ -102,5 +102,11 @@ public class Main {
         System.out.println("Which item would you like to cross off?");
         int removing = scanner.nextInt();
         TodoList.moveItem(removing, todo, crossedOff);
+    }
+
+    // EFFECTS: prints both lists
+    public static void printLists() {
+        System.out.println(TodoList.returnTodoList(todo));
+        System.out.println(TodoList.returnCrossedOffList(crossedOff));
     }
 }

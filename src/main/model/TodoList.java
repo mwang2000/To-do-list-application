@@ -1,6 +1,5 @@
 package model;
 
-import ui.Main;
 import java.util.ArrayList;
 
 public class TodoList {
@@ -22,7 +21,7 @@ public class TodoList {
         }
     }
 
-    // EFFECTS: prints a regular item
+    // EFFECTS: returns a regular item to be printed
     public static String printRegularItem(String print, Item e) {
         if (print.equals("")) {
             print = print + (e.todoGetItem());
@@ -32,7 +31,7 @@ public class TodoList {
         return print;
     }
 
-    // EFFECTS: prints an urgent item
+    // EFFECTS: returns an urgent item to be printed
     public static String printUrgentItem(String print, Item e) {
         if (print.equals("")) {
             print = print + e.todoGetItem() + "\n" + ((UrgentItem) e).timeLeft();
@@ -52,11 +51,6 @@ public class TodoList {
             }
             return print;
         }
-    }
-
-    public static void printLists() {
-        System.out.println(returnTodoList(Main.getTodo()));
-        System.out.println(returnCrossedOffList(Main.getCrossedOff()));
     }
 
     public static void moveItem(int removing, ArrayList<Item> todo, ArrayList<Item> crossedOff) {
