@@ -1,4 +1,5 @@
-package model;
+package exceptions;
 
 public class TooManyThingsToDoException extends Exception {
 }
+

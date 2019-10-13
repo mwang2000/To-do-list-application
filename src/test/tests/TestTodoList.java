@@ -1,5 +1,6 @@
 package tests;
 
+import exceptions.TooManyThingsToDoException;
 import model.Item;
 import model.TodoList;
 import model.UrgentItem;
@@ -9,9 +10,7 @@ import model.RegularItem;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTodoList {
     private ArrayList<Item> testTodo;
@@ -22,9 +21,12 @@ public class TestTodoList {
 
     @BeforeEach
     public void runBefore() {
-        entry = new RegularItem("abc");
-        entry2 = new RegularItem("def");
-        entry3 = new UrgentItem("ghi");
+        entry = new RegularItem();
+        entry.setTask("abc");
+        entry2 = new RegularItem();
+        entry2.setTask("def");
+        entry3 = new UrgentItem();
+        entry3.setTask("ghi");
         testTodo = new ArrayList<>();
         testCrossedOff = new ArrayList<>();
     }
@@ -34,6 +36,7 @@ public class TestTodoList {
         testTodo.add(entry);
         testTodo.add(entry2);
         TodoList.moveItem(1,testTodo,testCrossedOff);
+        entry.setNumber(0);
         assertEquals(1,testTodo.size());
         assertTrue(testTodo.contains(entry2));
         assertEquals(1,testCrossedOff.size());
@@ -46,6 +49,7 @@ public class TestTodoList {
         testTodo.add(entry2);
         testCrossedOff.add(entry3);
         TodoList.moveItem(2,testTodo,testCrossedOff);
+        entry2.setNumber(0);
         assertEquals(1,testTodo.size());
         assertTrue(testTodo.contains(entry));
         assertEquals(2,testCrossedOff.size());
@@ -57,6 +61,7 @@ public class TestTodoList {
         testTodo.add(entry3);
         testCrossedOff.add(entry);
         TodoList.moveItem(1,testTodo,testCrossedOff);
+        entry3.setNumber(0);
         assertEquals(0,testTodo.size());
         assertEquals(2,testCrossedOff.size());
         assertTrue(testCrossedOff.contains(entry3));
@@ -64,16 +69,17 @@ public class TestTodoList {
 
     @Test
     public void testReturnTodoEmpty() {
-        assertEquals("Nothing in the to do list.",TodoList.returnTodoList(testTodo));
-    }
-
-    @Test
-    public void testReturnTodoUrgent() {
-        testTodo.add(entry3);
-        entry3.setDueDate(2019,10,10);
-        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
+        assertEquals("Nothing in the to do list.",
                 TodoList.returnTodoList(testTodo));
     }
+
+//    @Test
+//    public void testReturnTodoUrgent() {
+//        testTodo.add(entry3);
+//        entry3.setDueDate(2019,10,10);
+//        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
+//                TodoList.returnTodoList(testTodo));
+//    }
 
     @Test
     public void testReturnTodoRegular() {
@@ -83,18 +89,26 @@ public class TestTodoList {
     }
 
     @Test
-    public void testReturnTodoMultiple() {
-        testTodo.add(entry);
+    public void testReturnTodoException() {
         testTodo.add(entry3);
-        entry.setDueDate(2019,10,31);
         entry3.setDueDate(2019,10,10);
-        assertEquals("0. abc due:2019-10-31 not done (to do)\n0. ghi due:2019-10-10 not done (to do)"
-                + "\nThere are 4 days until this task is due.",TodoList.returnTodoList(testTodo));
+        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThis item is overdue!",
+                TodoList.returnTodoList(testTodo));
     }
+
+//    @Test
+//    public void testReturnTodoMultiple() {
+//        testTodo.add(entry);
+//        testTodo.add(entry3);
+//        entry.setDueDate(2019,10,31);
+//        entry3.setDueDate(2019,10,10);
+//        assertEquals("0. abc due:2019-10-31 not done (to do)\n0. ghi due:2019-10-10 not done (to do)"
+//                + "\nThere are 4 days until this task is due.",TodoList.returnTodoList(testTodo));
+//    }
 
     @Test
     public void testReturnCrossedOffEmpty() {
-        assertEquals("Nothing in the crossed off list.",TodoList.returnCrossedOffList(testCrossedOff));
+        assertEquals("\nNothing in the crossed off list.",TodoList.returnCrossedOffList(testCrossedOff));
     }
 
     @Test
@@ -109,40 +123,41 @@ public class TestTodoList {
                 TodoList.returnCrossedOffList(testCrossedOff));
     }
 
-    @Test
-    public void testPrintRegularItemEmpty() {
-        String print = "";
-        assertEquals("0. abc due:null not done (to do)",TodoList.printRegularItem(print,entry));
-    }
-
-    @Test
-    public void testPrintRegularItem() {
-        String print = "hello";
-        assertEquals("hello\n0. abc due:null not done (to do)",TodoList.printRegularItem(print,entry));
-    }
-
-    @Test
-    public void testPrintUrgentItemEmpty() {
-        String print = "";
-        entry3.setDueDate(2019,10,10);
-        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
-                TodoList.printUrgentItem(print, entry3));
-    }
-
-    @Test
-    public void testPrintUrgentItem() {
-        String print = "world";
-        entry3.setDueDate(2019,10,10);
-        assertEquals("world\n0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
-                TodoList.printUrgentItem(print,entry3));
-    }
+//    @Test
+//    public void testPrintUrgentItemEmpty() {
+//        String print = "";
+//        entry3.setDueDate(2019,10,10);
+//        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
+//                TodoList.printUrgentItem(print, entry3));
+//    }
+//
+//    @Test
+//    public void testPrintUrgentItem() {
+//        String print = "world";
+//        entry3.setDueDate(2019,10,10);
+//        assertEquals("world\n0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
+//                TodoList.printUrgentItem(print,entry3));
+//    }
 
     @Test
     public void testOption1Exception() {
         testTodo.add(entry);
         testTodo.add(entry2);
         testTodo.add(entry2);
-        assertFalse(TodoList.option1(testTodo));
+        try{
+            TodoList.addTodo(testTodo,entry);
+            fail();
+        } catch (TooManyThingsToDoException e) {
+        }
+    }
+
+    @Test
+    public void testOption1NoException() {
+        try{
+            TodoList.addTodo(testTodo,entry);
+        } catch (TooManyThingsToDoException e) {
+            fail();
+        }
     }
 
     @Test
@@ -150,6 +165,20 @@ public class TestTodoList {
         testTodo.add(entry3);
         testTodo.add(entry3);
         testTodo.add(entry3);
-        assertFalse(TodoList.option2(testTodo));
+        try{
+            TodoList.addTodo(testTodo,entry);
+            fail();
+        } catch (TooManyThingsToDoException e) {
+        }
+    }
+
+    @Test
+    public void testOption2NoException() {
+        testTodo.add(entry);
+        try{
+            TodoList.addTodo(testTodo,entry);
+        } catch (TooManyThingsToDoException e) {
+            fail();
+        }
     }
 }

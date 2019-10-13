@@ -21,8 +21,10 @@ public class TestLoadable {
     @BeforeEach
     public void runBefore() {
         test = new ArrayList<>();
-        entry = new RegularItem("abc");
-        entry2 = new UrgentItem("def");
+        entry = new RegularItem();
+        entry.setTask("abc");
+        entry2 = new UrgentItem();
+        entry2.setTask("def");
         test.add(entry);
         test.add(entry2);
     }
@@ -32,7 +34,7 @@ public class TestLoadable {
         FileOutputStream fos = new FileOutputStream("file");
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(test);
-        RegularItem e = new RegularItem("");
+        RegularItem e = new RegularItem();
         assertEquals(test, e.load());
     }
 }

@@ -18,8 +18,10 @@ public class TestItem {
 
     @BeforeEach
     public void runBefore() {
-        entry = new RegularItem("abc");
-        entry2 = new UrgentItem("def");
+        entry = new RegularItem();
+        entry.setTask("abc");
+        entry2 = new UrgentItem();
+        entry2.setTask("def");
         testTodo = new ArrayList<>();
     }
 

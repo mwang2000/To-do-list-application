@@ -14,9 +14,9 @@ public abstract class Item implements Serializable,Loadable,Saveable {
 
     // MODIFIES: this
     // EFFECTS: creates an entry with number of 0 and takes a string as a parameter which becomes the item
-    public Item(String item) {
+    public Item() {
         this.number = 0;
-        this.task = item;
+        this.task = "";
         this.status = "not done";
     }
 

@@ -19,7 +19,7 @@ public class TestSaveable {
 
     @Test
     void testSave() throws IOException, ClassNotFoundException {
-        RegularItem e = new RegularItem("");
+        RegularItem e = new RegularItem();
         e.save();
         test.equals(e.load());
     }
