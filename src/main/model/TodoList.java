@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+import static ui.Main.addRegularItem;
+import static ui.Main.addUrgentItem;
+
 public class TodoList {
 
     // EFFECTS: prints the todo list and then the crossed out list
@@ -57,6 +60,26 @@ public class TodoList {
         todo.get(removing - 1).setStatus("done");
         crossedOff.add(todo.get(removing - 1));
         todo.remove(removing - 1);
+    }
+
+    public static boolean option1(ArrayList<Item> todo) {
+        try {
+            addRegularItem(todo);
+        } catch (TooManyThingsToDoException t) {
+            System.out.println("There are too many things to do! Finish some tasks first.");
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean option2(ArrayList<Item> todo) {
+        try {
+            addUrgentItem(todo);
+        } catch (TooManyThingsToDoException t) {
+            System.out.println("There are too many things to do! Finish some tasks first.");
+            return false;
+        }
+        return true;
     }
 }
 

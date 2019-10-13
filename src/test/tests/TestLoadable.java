@@ -1,4 +1,4 @@
-package placeholder;
+package tests;
 
 import model.Item;
 import model.RegularItem;

@@ -1,4 +1,4 @@
-package placeholder;
+package tests;
 
 import model.RegularItem;
 import org.junit.jupiter.api.BeforeEach;

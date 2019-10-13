@@ -1,9 +1,6 @@
 package ui;
 
-import model.Item;
-import model.RegularItem;
-import model.TodoList;
-import model.UrgentItem;
+import model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ public class Main {
     public static ArrayList<Item> todo;
     public static ArrayList<Item> crossedOff;
     public static Scanner scanner = new Scanner(System.in);
+    public static int MAX_TODO_SIZE = 3;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         todo = new ArrayList<>();
@@ -20,13 +18,13 @@ public class Main {
         run();
     }
 
-    public static ArrayList<Item> getTodo() {
-        return todo;
-    }
-
-    public static ArrayList<Item> getCrossedOff() {
-        return crossedOff;
-    }
+//    public static ArrayList<Item> getTodo() {
+//        return todo;
+//    }
+//
+//    public static ArrayList<Item> getCrossedOff() {
+//        return crossedOff;
+//    }
 
     // run the program
     // MODIFIES: this, crossedOff
@@ -37,9 +35,9 @@ public class Main {
         while (true) {
             int choice = welcome();
             if (choice == 1) {
-                addRegularItem();
+                TodoList.option1(todo);
             } else if (choice == 2) {
-                addUrgentItem();
+                TodoList.option2(todo);
             } else if (choice == 3) {
                 move();
             } else if (choice == 4) {
@@ -59,7 +57,10 @@ public class Main {
 
     //REQUIRES: choice == 1
     //EFFECTS: returns the next line the user enters
-    public static void addRegularItem() {
+    public static void addRegularItem(ArrayList<Item> todo) throws TooManyThingsToDoException {
+        if (todo.size() == MAX_TODO_SIZE) {
+            throw new TooManyThingsToDoException();
+        }
         System.out.println("Enter the item text.");
         Item entry = new RegularItem(scanner.nextLine());
         addTodo(entry);
@@ -67,7 +68,10 @@ public class Main {
 
     //REQUIRES: choice == 2
     //EFFECTS: returns the next line the user enters
-    public static void addUrgentItem() {
+    public static void addUrgentItem(ArrayList<Item> todo) throws TooManyThingsToDoException {
+        if (todo.size() == MAX_TODO_SIZE) {
+            throw new TooManyThingsToDoException();
+        }
         System.out.println("Enter the item text.");
         Item entry = new UrgentItem(scanner.nextLine());
         addTodo(entry);

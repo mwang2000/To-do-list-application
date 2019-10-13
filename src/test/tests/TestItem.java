@@ -1,4 +1,4 @@
-package placeholder;
+package tests;
 
 import model.Item;
 import model.UrgentItem;
@@ -88,23 +88,5 @@ public class TestItem {
         entry.setDueDate(2020,12,31);
         assertEquals(LocalDate.of(2020,12,31), entry.getDueDate());
     }
-
-//    @Test
-//    public void testTodoGetRegularItem() {
-//        testTodo.add(entry);
-//        entry.setTask("abc");
-//        entry.setDueDate(2019, 10, 10);
-//        assertEquals(entry.getNumber() + ". " + entry.getTask() + " due:" + entry.getDueDate() + " "
-//                + entry.getStatus() + " (to do)", entry.todoGetItem());
-//    }
-//
-//    @Test
-//    public void testTodoGetUrgentItem() {
-//        testTodo.add(entry2);
-//        entry2.setTask("abc");
-//        entry2.setDueDate(2020, 12, 31);
-//        assertEquals(entry2.getNumber() + ". " + entry2.getTask() + " due:" + entry2.getDueDate() + " "
-//                + entry2.getStatus() + " (crossed off)", entry2.crossedOffGetItem());
-//    }
 }
 

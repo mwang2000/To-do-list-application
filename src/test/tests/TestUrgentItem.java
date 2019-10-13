@@ -1,4 +1,4 @@
-package placeholder;
+package tests;
 
 import model.Item;
 import model.UrgentItem;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,7 +25,7 @@ public class TestUrgentItem {
     @Test
     public void testTimeLeft() {
         entry2.setDueDate(2019,10,10);
-        assertEquals("There are 4 days until this task is due.", entry2.timeLeft());
+        assertEquals("There are 2 days until this task is due.", entry2.timeLeft());
     }
 
 }

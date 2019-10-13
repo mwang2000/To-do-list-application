@@ -1,4 +1,4 @@
-package placeholder;
+package tests;
 
 import model.Item;
 import model.TodoList;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TestTodoList {
     private ArrayList<Item> testTodo;
@@ -134,5 +135,21 @@ public class TestTodoList {
         entry3.setDueDate(2019,10,10);
         assertEquals("world\n0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
                 TodoList.printUrgentItem(print,entry3));
+    }
+
+    @Test
+    public void testOption1Exception() {
+        testTodo.add(entry);
+        testTodo.add(entry2);
+        testTodo.add(entry2);
+        assertFalse(TodoList.option1(testTodo));
+    }
+
+    @Test
+    public void testOption2Exception() {
+        testTodo.add(entry3);
+        testTodo.add(entry3);
+        testTodo.add(entry3);
+        assertFalse(TodoList.option2(testTodo));
     }
 }
