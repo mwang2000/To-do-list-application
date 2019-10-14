@@ -10,7 +10,9 @@ import model.RegularItem;
 
 import java.util.ArrayList;
 
+import static model.TodoList.addTodo;
 import static org.junit.jupiter.api.Assertions.*;
+import static ui.Main.todo;
 
 public class TestTodoList {
     private ArrayList<Item> testTodo;
@@ -18,6 +20,7 @@ public class TestTodoList {
     private RegularItem entry;
     private RegularItem entry2;
     private UrgentItem entry3;
+    private int MAX_TODO_SIZE = 3;
 
     @BeforeEach
     public void runBefore() {
@@ -121,64 +124,5 @@ public class TestTodoList {
         entry3.setDueDate(2019,10,10);
         assertEquals("\n0. abc due:2019-10-31 done (crossed off)\n0. ghi due:2019-10-10 done (crossed off)",
                 TodoList.returnCrossedOffList(testCrossedOff));
-    }
-
-//    @Test
-//    public void testPrintUrgentItemEmpty() {
-//        String print = "";
-//        entry3.setDueDate(2019,10,10);
-//        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
-//                TodoList.printUrgentItem(print, entry3));
-//    }
-//
-//    @Test
-//    public void testPrintUrgentItem() {
-//        String print = "world";
-//        entry3.setDueDate(2019,10,10);
-//        assertEquals("world\n0. ghi due:2019-10-10 not done (to do)\nThere are 4 days until this task is due.",
-//                TodoList.printUrgentItem(print,entry3));
-//    }
-
-    @Test
-    public void testOption1Exception() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
-        testTodo.add(entry2);
-        try{
-            TodoList.addTodo(testTodo,entry);
-            fail();
-        } catch (TooManyThingsToDoException e) {
-        }
-    }
-
-    @Test
-    public void testOption1NoException() {
-        try{
-            TodoList.addTodo(testTodo,entry);
-        } catch (TooManyThingsToDoException e) {
-            fail();
-        }
-    }
-
-    @Test
-    public void testOption2Exception() {
-        testTodo.add(entry3);
-        testTodo.add(entry3);
-        testTodo.add(entry3);
-        try{
-            TodoList.addTodo(testTodo,entry);
-            fail();
-        } catch (TooManyThingsToDoException e) {
-        }
-    }
-
-    @Test
-    public void testOption2NoException() {
-        testTodo.add(entry);
-        try{
-            TodoList.addTodo(testTodo,entry);
-        } catch (TooManyThingsToDoException e) {
-            fail();
-        }
     }
 }

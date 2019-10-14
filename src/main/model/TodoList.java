@@ -5,7 +5,7 @@ import exceptions.TooManyThingsToDoException;
 
 import java.util.ArrayList;
 
-import static ui.Main.crossedOff;
+import static ui.Main.setItem;
 
 public class TodoList {
     public static int MAX_TODO_SIZE = 3;
@@ -65,31 +65,16 @@ public class TodoList {
 //        return true;
 //    }
 
-    public static void addTodo(ArrayList<Item> todo, Item item) throws TooManyThingsToDoException {
-        if (todo.size() == MAX_TODO_SIZE) {
-            throw new TooManyThingsToDoException();
-        }
+//    public static void addTodo(ArrayList<Item> todo, Item item) throws TooManyThingsToDoException {
+//        if (todo.size() == MAX_TODO_SIZE) {
+//            throw new TooManyThingsToDoException();
+//        }
+//        todo.add(item);
+//    }
+
+    public static void addTodo(ArrayList<Item> todo,Item item) throws TooManyThingsToDoException {
+        setItem(item);
         todo.add(item);
-    }
-
-    public static void option1(ArrayList<Item> todo,Item item) {
-        try {
-            TodoList.addTodo(todo,item);
-        } catch (TooManyThingsToDoException t) {
-            System.out.println("Too many things to do! Finish some tasks first.");
-        } finally {
-            System.out.println("The to-do list is:\n" + returnTodoList(todo));
-        }
-    }
-
-    public static void option2(ArrayList<Item> todo,Item item) {
-        try {
-            TodoList.addTodo(todo,item);
-        } catch (TooManyThingsToDoException t) {
-            System.out.println("Too many things to do! Finish some tasks first.");
-        } finally {
-            System.out.println("The to-do list is:\n" + returnTodoList(todo));
-        }
     }
 
     //EFFECTS: adds urgentItem to todo list unless there are too many items in todo

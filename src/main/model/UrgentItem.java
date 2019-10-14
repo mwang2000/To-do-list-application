@@ -6,7 +6,9 @@ import exceptions.TooManyThingsToDoException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import static model.TodoList.returnTodoList;
 import static ui.Main.setItem;
+import static ui.Main.todo;
 
 public class UrgentItem extends Item {
     public UrgentItem() {
@@ -14,18 +16,11 @@ public class UrgentItem extends Item {
     }
 
     public String timeLeft() throws OverDueException {
-        LocalDate today = LocalDate.now();
-        long difference = ChronoUnit.DAYS.between(today,dueDate);
+        long difference = ChronoUnit.DAYS.between(LocalDate.now(),dueDate);
         if (difference < 0) {
             throw new OverDueException();
         }
         return "There are " + difference + " days until this task is due.";
-    }
-
-    public static UrgentItem setUrgentItem() {
-        UrgentItem item = new UrgentItem();
-        setItem(item);
-        return item;
     }
 
     // EFFECTS: returns an urgent item to be printed

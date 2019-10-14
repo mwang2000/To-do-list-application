@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestUrgentItem {
@@ -25,7 +24,7 @@ public class TestUrgentItem {
 
     @Test
     public void testTimeLeft() throws OverDueException {
-        assertEquals("There are 7 days until this task is due.", entry2.timeLeft());
+        assertEquals("There are 6 days until this task is due.", entry2.timeLeft());
     }
 
     @Test
@@ -49,15 +48,29 @@ public class TestUrgentItem {
     @Test
     public void testPrintOverdueEmpty() {
         String print = "";
-        assertEquals("0. def due:null not done (to do)\nThis item is overdue!",
-                entry2.printOverdue(print,entry2));
+        assertEquals("0. def due:2019-10-20 not done (to do)\nThis item is overdue!",
+                UrgentItem.printOverdue(print,entry2));
     }
 
     @Test
     public void testPrintOverdueNotEmpty() {
         String print = "hello";
-        assertEquals("hello\n0. def due:null not done (to do)\nThis item is overdue!",
-                entry2.printOverdue(print,entry2));
+        assertEquals("hello\n0. def due:2019-10-20 not done (to do)\nThis item is overdue!",
+                UrgentItem.printOverdue(print,entry2));
+    }
+
+    @Test
+    public void testPrintUrgentItemEmpty() throws OverDueException {
+        String print = "";
+        assertEquals("0. def due:2019-10-20 not done (to do)\nThere are 6 days until this task is due.",
+                UrgentItem.printUrgentItem(print,entry2));
+    }
+
+    @Test
+    public void testPrintUrgentItemNotEmpty() throws OverDueException {
+        String print = "hello";
+        assertEquals("hello\n0. def due:2019-10-20 not done (to do)\nThere are 6 days until this task is due.",
+                UrgentItem.printUrgentItem(print,entry2));
     }
 
 }

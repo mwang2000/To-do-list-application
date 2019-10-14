@@ -1,18 +1,15 @@
 package model;
 
+import exceptions.TooManyThingsToDoException;
+
+import static model.TodoList.returnTodoList;
 import static ui.Main.setItem;
+import static ui.Main.todo;
 
 // represents a regular item in a list
 public class RegularItem extends Item {
     public RegularItem() {
         super();
-    }
-
-
-    public static RegularItem setRegularItem() {
-        RegularItem item = new RegularItem();
-        setItem(item);
-        return item;
     }
 
 

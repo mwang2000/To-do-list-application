@@ -1,15 +1,13 @@
 package ui;
 
+import exceptions.TooManyThingsToDoException;
 import model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static model.RegularItem.setRegularItem;
-import static model.TodoList.option1;
-import static model.TodoList.option2;
-import static model.UrgentItem.setUrgentItem;
+import static model.TodoList.*;
 
 public class Main {
     public static ArrayList<Item> todo;
@@ -31,11 +29,9 @@ public class Main {
         while (true) {
             int choice = welcome();
             if (choice == 1) {
-                RegularItem item = setRegularItem();
-                option1(todo,item);
+                option1();
             } else if (choice == 2) {
-                UrgentItem item = setUrgentItem();
-                option2(todo,item);
+                option2();
             } else if (choice == 3) {
                 move();
             } else if (choice == 4) {
@@ -44,6 +40,30 @@ public class Main {
                 e.save();
                 break;
             }
+        }
+    }
+
+    //EFFECTS: catches TooManyThingsToDoException for UrgentItems
+    public static void option2() {
+        UrgentItem item = new UrgentItem();
+        try {
+            addTodo(todo,item);
+        } catch (TooManyThingsToDoException t) {
+            System.out.println("Too many tasks to do! Finish some tasks first.");
+        } finally {
+            System.out.println("\nThe to-do list is:" + returnTodoList(todo));
+        }
+    }
+
+    //EFFECTS: catches TooManyThingsToDoException for RegularItems
+    public static void option1() {
+        RegularItem item = new RegularItem();
+        try {
+            addTodo(todo,item);
+        } catch (TooManyThingsToDoException t) {
+            System.out.println("Too many tasks to do! Finish some tasks first.");
+        } finally {
+            System.out.println("\nThe to-do list is:" + returnTodoList(todo));
         }
     }
 
@@ -124,7 +144,10 @@ public class Main {
     // REQUIRES: choice == 1 or choice == 2
     // MODIFIES: this
     // EFFECTS: adds an entry into the todo list consisting of the item and its number
-    public static void setItem(Item item) {
+    public static void setItem(Item item) throws TooManyThingsToDoException {
+        if (todo.size() == MAX_TODO_SIZE) {
+            throw new TooManyThingsToDoException();
+        }
         item.setNumber(todo.size() + 1);
         System.out.println("Enter the task.");
         item.setTask(scanner.nextLine());
