@@ -15,6 +15,7 @@ public class UrgentItem extends Item {
         super();
     }
 
+    //EFFECTS: returns a string that states the number of days until due date
     public String timeLeft() throws OverDueException {
         long difference = ChronoUnit.DAYS.between(LocalDate.now(),dueDate);
         if (difference < 0) {
@@ -33,6 +34,7 @@ public class UrgentItem extends Item {
         return print;
     }
 
+    //EFFECTS: returns a string to be printed for an overdue item
     public static String printOverdue(String print, Item e) {
         if (print.equals("")) {
             print = print + e.todoGetItem() + "\nThis item is overdue!";

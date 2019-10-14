@@ -72,11 +72,6 @@ public class TodoList {
 //        todo.add(item);
 //    }
 
-    public static void addTodo(ArrayList<Item> todo,Item item) throws TooManyThingsToDoException {
-        setItem(item);
-        todo.add(item);
-    }
-
     //EFFECTS: adds urgentItem to todo list unless there are too many items in todo
 //    public static boolean option2(ArrayList<Item> todo) {
 //        try {

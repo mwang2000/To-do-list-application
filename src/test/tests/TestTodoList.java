@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
 import java.util.ArrayList;
-
-import static model.TodoList.addTodo;
 import static org.junit.jupiter.api.Assertions.*;
 import static ui.Main.todo;
 
@@ -87,15 +85,23 @@ public class TestTodoList {
     @Test
     public void testReturnTodoRegular() {
         testTodo.add(entry);
-        entry.setDueDate(2019,10,10);
-        assertEquals("0. abc due:2019-10-10 not done (to do)",TodoList.returnTodoList(testTodo));
+        entry.setDueDate(2019,10,20);
+        assertEquals("0. abc due:2019-10-20 not done (to do)",TodoList.returnTodoList(testTodo));
+    }
+
+    @Test
+    public void testReturnTodoUrgent() {
+        testTodo.add(entry3);
+        entry3.setDueDate(2019,10,20);
+        assertEquals("0. ghi due:2019-10-20 not done (to do)\nThere are 6 days until this task is due.",
+                TodoList.returnTodoList(testTodo));
     }
 
     @Test
     public void testReturnTodoException() {
         testTodo.add(entry3);
-        entry3.setDueDate(2019,10,10);
-        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThis item is overdue!",
+        entry3.setDueDate(2019,10,20);
+        assertEquals("0. ghi due:2019-10-20 not done (to do)\nThis item is overdue!",
                 TodoList.returnTodoList(testTodo));
     }
 

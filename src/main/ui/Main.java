@@ -67,7 +67,7 @@ public class Main {
         }
     }
 
-
+    //EFFECTS: loads todo list from file
     public static Item loadTodo() throws IOException, ClassNotFoundException {
         Item e = new RegularItem();
         todo = e.load();
@@ -171,5 +171,12 @@ public class Main {
     public static void printLists() {
         System.out.println(TodoList.returnTodoList(todo));
         System.out.println(TodoList.returnCrossedOffList(crossedOff));
+    }
+
+    //MODIFIES: todo
+    //EFFECTS: adds an item to to-do list
+    public static void addTodo(ArrayList<Item> todo,Item item) throws TooManyThingsToDoException {
+        setItem(item);
+        todo.add(item);
     }
 }
