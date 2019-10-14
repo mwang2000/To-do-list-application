@@ -100,8 +100,8 @@ public class TestTodoList {
     @Test
     public void testReturnTodoException() {
         testTodo.add(entry3);
-        entry3.setDueDate(2019,10,20);
-        assertEquals("0. ghi due:2019-10-20 not done (to do)\nThis item is overdue!",
+        entry3.setDueDate(2019,10,10);
+        assertEquals("0. ghi due:2019-10-10 not done (to do)\nThis item is overdue!",
                 TodoList.returnTodoList(testTodo));
     }
 
