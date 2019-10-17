@@ -1,10 +1,16 @@
 package model;
 
-import ui.Main;
+import exceptions.OverDueException;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static ui.Main.todo;
 
 public abstract class Item implements Serializable,Loadable,Saveable {
     protected int number;
@@ -41,7 +47,7 @@ public abstract class Item implements Serializable,Loadable,Saveable {
     // REQUIRES: the date given is not in the past
     // MODIFIES: this
     // EFFECTS: sets the due date of the entry to the user input
-    public void setDueDate(int y,int m,int d) {
+    public void setDue(int y, int m, int d) {
         this.dueDate = LocalDate.of(y,m,d);
     }
 
@@ -61,7 +67,7 @@ public abstract class Item implements Serializable,Loadable,Saveable {
     }
 
     // EFFECTS: returns the due date of the entry
-    public LocalDate getDueDate() {
+    public LocalDate getDue() {
         return dueDate;
     }
 
@@ -77,18 +83,30 @@ public abstract class Item implements Serializable,Loadable,Saveable {
         return number + ". " + task + " due:" + dueDate + " " + status + " (crossed off)";
     }
 
-    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream("file");
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        ArrayList<Item> todo = (ArrayList<Item>) ois.readObject();
-        ois.close();
-        return todo;
-    }
+//    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
+//        FileInputStream fis = new FileInputStream("./data/file");
+//        ObjectInputStream ois = new ObjectInputStream(fis);
+//        ArrayList<Item> todo = (ArrayList<Item>) ois.readObject();
+//        ois.close();
+//        return todo;
+//    }
 
-    public void save() throws IOException {
-        FileOutputStream fos = new FileOutputStream("file");
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(Main.todo);
-        oos.close();
-    }
+//    public ArrayList<Item> load() throws IOException {
+//        File file = new File(String.valueOf(Paths.get("./data/file")));
+//        List<String> lines = Files.readAllLines(Paths.get(String.valueOf(file)));
+//        int i = 0;
+//        Item item = new RegularItem();
+//        while (lines != null) {
+//            item.setNumber(Integer.parseInt(lines.get(0)));
+//            item.setTask(lines.get(1));
+//            item.setDueDate();
+//        }
+//    }
+
+//    public void save() throws IOException {
+//        FileOutputStream fos = new FileOutputStream("./data/file");
+//        ObjectOutputStream oos = new ObjectOutputStream(fos);
+//        oos.writeObject(todo);
+//        oos.close();
+//    }
 }

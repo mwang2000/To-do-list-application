@@ -25,7 +25,7 @@ public class Main {
     // EFFECTS: adds and removes entries in todo and crossedOff lists and prints lists according to the functions
     // required by the user
     public static void run() throws IOException, ClassNotFoundException {
-        Item e = loadTodo();
+        TodoList tl = loadTodo();
         while (true) {
             int choice = welcome();
             if (choice == 1) {
@@ -37,7 +37,7 @@ public class Main {
             } else if (choice == 4) {
                 printLists();
             } else {
-                e.save();
+                tl.save(todo);
                 break;
             }
         }
@@ -47,7 +47,7 @@ public class Main {
     public static void option2() {
         UrgentItem item = new UrgentItem();
         try {
-            addTodo(todo,item);
+            setItem(todo,item);
         } catch (TooManyThingsToDoException t) {
             System.out.println("Too many tasks to do! Finish some tasks first.");
         } finally {
@@ -59,7 +59,7 @@ public class Main {
     public static void option1() {
         RegularItem item = new RegularItem();
         try {
-            addTodo(todo,item);
+            setItem(todo,item);
         } catch (TooManyThingsToDoException t) {
             System.out.println("Too many tasks to do! Finish some tasks first.");
         } finally {
@@ -68,10 +68,11 @@ public class Main {
     }
 
     //EFFECTS: loads todo list from file
-    public static Item loadTodo() throws IOException, ClassNotFoundException {
-        Item e = new RegularItem();
-        todo = e.load();
-        return e;
+    public static TodoList loadTodo() throws IOException, ClassNotFoundException {
+        TodoList tl = new TodoList();
+        ArrayList<Item> list = new ArrayList<>();
+        todo = tl.load(list);
+        return tl;
     }
 
 
@@ -85,66 +86,9 @@ public class Main {
         return choice;
     }
 
-    //REQUIRES: choice == 1
-    //EFFECTS: returns the next line the user enters
-//    public static Item addRegularItem(ArrayList<Item> todo) throws TooManyThingsToDoException {
-//        if (todo.size() == MAX_TODO_SIZE) {
-//            throw new TooManyThingsToDoException();
-//        }
-//        Item entry = new RegularItem();
-//        setItem(entry);
-//        return entry;
-//    }
-
-//    public static Item setRegularItem(ArrayList<Item> todo) throws InvalidDateException, TooManyThingsToDoException {
-//        if (todo.size() == MAX_TODO_SIZE) {
-//            throw new TooManyThingsToDoException();
-//        }
-//        Item item = new RegularItem();
-//        item.setNumber(todo.size() + 1);
-//        System.out.println("Enter the due date (3 integers in the form of yyyy mm dd):");
-//        int y = scanner.nextInt();
-//        int m = scanner.nextInt();
-//        int d = scanner.nextInt();
-//        item.setDueDate(y, m, d);
-//        if (ChronoUnit.DAYS.between(LocalDate.now(),item.getDueDate()) < 0) {
-//            throw new InvalidDateException();
-//        }
-//        return item;
-//    }
-
-    //REQUIRES: choice == 2
-    //EFFECTS: returns the next line the user enters
-//    public static Item addUrgentItem(ArrayList<Item> todo) throws TooManyThingsToDoException {
-//        if (todo.size() == MAX_TODO_SIZE) {
-//            throw new TooManyThingsToDoException();
-//        }
-//        Item entry = new UrgentItem();
-//        setItem(entry);
-//        return entry;
-//    }
-
-//    public static Item setUrgentItem(ArrayList<Item> todo) throws InvalidDateException, TooManyThingsToDoException {
-//        if (todo.size() == MAX_TODO_SIZE) {
-//            throw new TooManyThingsToDoException();
-//        }
-//        Item item = new UrgentItem();
-//        item.setNumber(todo.size() + 1);
-//        System.out.println("Enter the due date (3 integers in the form of yyyy mm dd):");
-//        int y = scanner.nextInt();
-//        int m = scanner.nextInt();
-//        int d = scanner.nextInt();
-//        item.setDueDate(y, m, d);
-//        if (ChronoUnit.DAYS.between(LocalDate.now(),item.getDueDate()) < 0) {
-//            throw new InvalidDateException();
-//        }
-//        return item;
-//    }
-
-    // REQUIRES: choice == 1 or choice == 2
     // MODIFIES: this
     // EFFECTS: adds an entry into the todo list consisting of the item and its number
-    public static void setItem(Item item) throws TooManyThingsToDoException {
+    public static void setItem(ArrayList<Item> todo,Item item) throws TooManyThingsToDoException {
         if (todo.size() == MAX_TODO_SIZE) {
             throw new TooManyThingsToDoException();
         }
@@ -155,7 +99,8 @@ public class Main {
         int y = scanner.nextInt();
         int m = scanner.nextInt();
         int d = scanner.nextInt();
-        item.setDueDate(y, m, d);
+        item.setDue(y, m, d);
+        todo.add(item);
     }
 
 
@@ -171,12 +116,5 @@ public class Main {
     public static void printLists() {
         System.out.println(TodoList.returnTodoList(todo));
         System.out.println(TodoList.returnCrossedOffList(crossedOff));
-    }
-
-    //MODIFIES: todo
-    //EFFECTS: adds an item to to-do list
-    public static void addTodo(ArrayList<Item> todo,Item item) throws TooManyThingsToDoException {
-        setItem(item);
-        todo.add(item);
     }
 }

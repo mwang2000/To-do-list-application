@@ -1,14 +1,11 @@
 package model;
 
 import exceptions.OverDueException;
-import exceptions.TooManyThingsToDoException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-
-import static model.TodoList.returnTodoList;
-import static ui.Main.setItem;
-import static ui.Main.todo;
+import java.util.ArrayList;
 
 public class UrgentItem extends Item {
     public UrgentItem() {
@@ -42,5 +39,15 @@ public class UrgentItem extends Item {
             print = print + "\n" + e.todoGetItem() + "\nThis item is overdue!";
         }
         return print;
+    }
+
+    @Override
+    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public void save() throws IOException {
+
     }
 }

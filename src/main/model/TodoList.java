@@ -1,11 +1,16 @@
 package model;
 
 import exceptions.OverDueException;
-import exceptions.TooManyThingsToDoException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-
-import static ui.Main.setItem;
+import java.util.Arrays;
+import java.util.List;
 
 public class TodoList {
     public static int MAX_TODO_SIZE = 3;
@@ -82,6 +87,63 @@ public class TodoList {
 //        }
 //        return true;
 //    }
+
+    public void save(ArrayList<Item> list) throws FileNotFoundException {
+        File file = new File(String.valueOf(Paths.get("./data/file")));
+        PrintWriter printWriter = new PrintWriter(file);
+        for (Item i : list) {
+            printWriter.println(saveTodo(i));
+        }
+        printWriter.close();
+    }
+
+    public String saveTodo(Item i) {
+        String print = "";
+        if (i instanceof UrgentItem) {
+            try {
+                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                        + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
+                        + "_" + ((UrgentItem) i).timeLeft();
+            } catch (OverDueException e) {
+                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                        + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
+                        + "_" + "This item is overdue!";
+            }
+        } else {
+            print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                    + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus();
+        }
+        return print;
+    }
+
+    public ArrayList<Item> load(ArrayList<Item> list) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("./data/file"));
+        for (String line : lines) {
+            ArrayList<String> partsOfLine = splitOnBar(line);
+            if (partsOfLine.size() == 7) {
+                Item item = new UrgentItem();
+                retrieveItemFields(partsOfLine, item,list);
+            } else {
+                Item item = new RegularItem();
+                retrieveItemFields(partsOfLine, item,list);
+            }
+        }
+        return list;
+    }
+
+    public void retrieveItemFields(ArrayList<String> partsOfLine, Item item,ArrayList<Item> list) {
+        item.setNumber(Integer.parseInt(partsOfLine.get(0)));
+        item.setTask(partsOfLine.get(1));
+        item.setDue(Integer.parseInt(partsOfLine.get(2)), Integer.parseInt(partsOfLine.get(3)),
+                Integer.parseInt(partsOfLine.get(4)));
+        item.setStatus(partsOfLine.get(5));
+        list.add(item);
+    }
+
+    public static ArrayList<String> splitOnBar(String line) {
+        String[] splits = line.split("_");
+        return new ArrayList<>(Arrays.asList(splits));
+    }
 
 }
 

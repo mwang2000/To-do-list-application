@@ -1,10 +1,7 @@
 package model;
 
-import exceptions.TooManyThingsToDoException;
-
-import static model.TodoList.returnTodoList;
-import static ui.Main.setItem;
-import static ui.Main.todo;
+import java.io.IOException;
+import java.util.ArrayList;
 
 // represents a regular item in a list
 public class RegularItem extends Item {
@@ -21,5 +18,15 @@ public class RegularItem extends Item {
             print = print + "\n" + (e.todoGetItem());
         }
         return print;
+    }
+
+    @Override
+    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public void save() throws IOException {
+
     }
 }

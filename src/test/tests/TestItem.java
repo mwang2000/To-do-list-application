@@ -56,8 +56,8 @@ public class TestItem {
     @Test
     public void testSetDueDate() {
         testTodo.add(entry2);
-        entry.setDueDate(2019,10,10);
-        assertEquals(LocalDate.of(2019,10,10),entry.getDueDate());
+        entry.setDue(2019,10,10);
+        assertEquals(LocalDate.of(2019,10,10),entry.getDue());
     }
 
     @Test
@@ -87,8 +87,8 @@ public class TestItem {
     @Test
     public void testGetDueDate() {
         testTodo.add(entry);
-        entry.setDueDate(2020,12,31);
-        assertEquals(LocalDate.of(2020,12,31), entry.getDueDate());
+        entry.setDue(2020,12,31);
+        assertEquals(LocalDate.of(2020,12,31), entry.getDue());
     }
 }
 

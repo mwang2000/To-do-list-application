@@ -1,6 +1,5 @@
 package tests;
 
-import exceptions.TooManyThingsToDoException;
 import model.Item;
 import model.TodoList;
 import model.UrgentItem;
@@ -8,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
-import static ui.Main.todo;
 
 public class TestTodoList {
     private ArrayList<Item> testTodo;
@@ -18,7 +17,6 @@ public class TestTodoList {
     private RegularItem entry;
     private RegularItem entry2;
     private UrgentItem entry3;
-    private int MAX_TODO_SIZE = 3;
 
     @BeforeEach
     public void runBefore() {
@@ -85,14 +83,14 @@ public class TestTodoList {
     @Test
     public void testReturnTodoRegular() {
         testTodo.add(entry);
-        entry.setDueDate(2019,10,20);
+        entry.setDue(2019,10,20);
         assertEquals("0. abc due:2019-10-20 not done (to do)",TodoList.returnTodoList(testTodo));
     }
 
     @Test
     public void testReturnTodoUrgent() {
         testTodo.add(entry3);
-        entry3.setDueDate(2019,10,20);
+        entry3.setDue(2019,10,20);
         assertEquals("0. ghi due:2019-10-20 not done (to do)\nThere are 6 days until this task is due.",
                 TodoList.returnTodoList(testTodo));
     }
@@ -100,20 +98,10 @@ public class TestTodoList {
     @Test
     public void testReturnTodoException() {
         testTodo.add(entry3);
-        entry3.setDueDate(2019,10,10);
+        entry3.setDue(2019,10,10);
         assertEquals("0. ghi due:2019-10-10 not done (to do)\nThis item is overdue!",
                 TodoList.returnTodoList(testTodo));
     }
-
-//    @Test
-//    public void testReturnTodoMultiple() {
-//        testTodo.add(entry);
-//        testTodo.add(entry3);
-//        entry.setDueDate(2019,10,31);
-//        entry3.setDueDate(2019,10,10);
-//        assertEquals("0. abc due:2019-10-31 not done (to do)\n0. ghi due:2019-10-10 not done (to do)"
-//                + "\nThere are 4 days until this task is due.",TodoList.returnTodoList(testTodo));
-//    }
 
     @Test
     public void testReturnCrossedOffEmpty() {
@@ -126,9 +114,20 @@ public class TestTodoList {
         testCrossedOff.add(entry3);
         entry.setStatus("done");
         entry3.setStatus("done");
-        entry.setDueDate(2019,10,31);
-        entry3.setDueDate(2019,10,10);
+        entry.setDue(2019,10,31);
+        entry3.setDue(2019,10,10);
         assertEquals("\n0. abc due:2019-10-31 done (crossed off)\n0. ghi due:2019-10-10 done (crossed off)",
                 TodoList.returnCrossedOffList(testCrossedOff));
+    }
+
+    @Test
+    void testSaveLoad() throws IOException {
+        TodoList tl = new TodoList();
+        entry.setDue(2020,05,25);
+        testTodo.add(entry);
+        entry3.setDue(2019,10,31);
+        testTodo.add(entry3);
+        tl.save(testTodo);
+        assertEquals(testTodo,tl.load(testTodo));
     }
 }
