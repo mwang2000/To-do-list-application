@@ -16,19 +16,25 @@ public class TestRegularItem {
     public void runBefore() {
         entry = new RegularItem();
         entry.setTask("abc");
+        entry.setDue(2020,1,1);
+        entry.setNumber(1);
+        entry.setKeyword("a");
         entry2 = new UrgentItem();
         entry2.setTask("def");
+        entry2.setDue(2020,12,31);
+        entry2.setNumber(2);
+        entry2.setKeyword("b");
     }
 
     @Test
     public void testPrintRegularItemEmpty() {
         String print = "";
-        assertEquals("0. abc due:null not done (to do)",RegularItem.printRegularItem(print,entry));
+        assertEquals("1. abc due:2020-01-01 not done Keyword: a",RegularItem.printRegularItem(print,entry));
     }
 
     @Test
     public void testPrintRegularItem() {
         String print = "hello";
-        assertEquals("hello\n0. abc due:null not done (to do)",RegularItem.printRegularItem(print,entry));
+        assertEquals("hello\n1. abc due:2020-01-01 not done Keyword: a",RegularItem.printRegularItem(print,entry));
     }
 }

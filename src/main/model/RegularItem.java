@@ -19,14 +19,4 @@ public class RegularItem extends Item {
         }
         return print;
     }
-
-    @Override
-    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public void save() throws IOException {
-
-    }
 }

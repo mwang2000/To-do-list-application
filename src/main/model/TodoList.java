@@ -8,15 +8,53 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import static ui.Main.todoMap;
 
-public class TodoList {
+public class TodoList implements Saveable,Loadable {
+    public static ArrayList<Item> todo;
+    public static ArrayList<Item> crossedOff;
+    public static ArrayList<Item> examPrep;
     public static int MAX_TODO_SIZE = 3;
 
+    public TodoList() {
+        todo = new ArrayList<>();
+        crossedOff = new ArrayList<>();
+        examPrep = new ArrayList<>();
+    }
+
+    public static int getTodoSize() {
+        return todo.size();
+    }
+
+    public static int getExamPrepSize() {
+        return examPrep.size();
+    }
+
+    public static void updateTodo(Map<String,Item> map) {
+        todo = new ArrayList<>(map.values());
+    }
+
+    public void addExamPrep(Item i) {
+        if (!examPrep.contains(i)) {
+            if (i instanceof UrgentItem) {
+                Item e = new UrgentItem();
+                e.setTask(i.getTask());
+                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
+                examPrep.add(e);
+            } else {
+                Item e = new RegularItem();
+                e.setTask(i.getTask());
+                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
+                examPrep.add(e);
+            }
+            i.addList(this);
+        }
+    }
+
+
     // EFFECTS: prints the todo list and then the crossed out list
-    public static String returnTodoList(ArrayList<Item> todo) {
+    public static String returnTodoList() {
         if (todo.size() == 0) {
             return "Nothing in the to do list.";
         } else {
@@ -38,25 +76,50 @@ public class TodoList {
 
 
     //EFFECTS: returns the crossed off list as a string to be printed
-    public static String returnCrossedOffList(ArrayList<Item> crossedOff) {
+    public static String returnCrossedOffList() {
         if (crossedOff.size() == 0) {
             return "\nNothing in the crossed off list.";
         } else {
             String print = "";
             for (Item e : crossedOff) {
-                print = print + "\n" + e.crossedOffGetItem();
+                print = print + e.crossedOffGetItem();
             }
-            return print;
+            return "\nThe crossed off list is\n" + print;
         }
     }
 
+    public static String returnExamPrep() {
+        if (examPrep.size() == 0) {
+            return "\nNothing in the exam prep list.";
+        } else {
+            String print = "";
+            for (Item e : examPrep) {
+                print = print + e.task + " " + e.dueDate + "\n";
+            }
+            return "The exam prep list is:\n" + print;
+        }
+    }
+
+
     //MODIFIES: todo,crossedOff
     //EFFECTS: moves an item from todo to crossedOff and changes the status to "done"
-    public static void moveItem(int removing, ArrayList<Item> todo, ArrayList<Item> crossedOff) {
-        todo.get(removing - 1).setStatus("done");
-        todo.get(removing - 1).setNumber(0);
-        crossedOff.add(todo.get(removing - 1));
-        todo.remove(removing - 1);
+    public void moveItem(String removing) {
+        Item removedItem = todoMap.get(removing);
+        if (examPrep.contains(removedItem)) {
+            removeExamPrep(removedItem);
+        }
+        crossedOff.add(removedItem);
+        removedItem.setStatus("done");
+        removedItem.setNumber(0);
+        todoMap.remove(removing);
+        updateTodo(todoMap);
+    }
+
+    public void removeExamPrep(Item i) {
+        if (examPrep.contains(i)) {
+            examPrep.remove(i);
+            i.removeList(this);
+        }
     }
 
     //EFFECTS: adds regular item to todo list unless there are too many items in todo
@@ -88,11 +151,11 @@ public class TodoList {
 //        return true;
 //    }
 
-    public void save(ArrayList<Item> list) throws FileNotFoundException {
+    public void save() throws FileNotFoundException {
         File file = new File(String.valueOf(Paths.get("./data/file")));
         PrintWriter printWriter = new PrintWriter(file);
-        for (Item i : list) {
-            printWriter.println(saveTodo(i));
+        for (Map.Entry<String,Item> i : todoMap.entrySet()) {
+            printWriter.println(i.getKey() + "_" + saveTodo(i.getValue()));
         }
         printWriter.close();
     }
@@ -116,28 +179,37 @@ public class TodoList {
         return print;
     }
 
-    public ArrayList<Item> load(ArrayList<Item> list) throws IOException {
+
+    //EFFECTS: loads todo list from file
+    public static void loadTodo(TodoList tl) throws IOException {
+        Map<String,Item> map = new HashMap<>();
+        todoMap = tl.load(map);
+        todo = new ArrayList<>(todoMap.values());
+    }
+
+    public Map<String,Item> load(Map<String,Item> map) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("./data/file"));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnBar(line);
-            if (partsOfLine.size() == 7) {
+            if (partsOfLine.size() == 8) {
                 Item item = new UrgentItem();
-                retrieveItemFields(partsOfLine, item,list);
+                map.put(partsOfLine.get(0),retrieveItemFields(partsOfLine,item));
             } else {
                 Item item = new RegularItem();
-                retrieveItemFields(partsOfLine, item,list);
+                map.put(partsOfLine.get(0),retrieveItemFields(partsOfLine,item));
             }
         }
-        return list;
+        return map;
     }
 
-    public void retrieveItemFields(ArrayList<String> partsOfLine, Item item,ArrayList<Item> list) {
-        item.setNumber(Integer.parseInt(partsOfLine.get(0)));
-        item.setTask(partsOfLine.get(1));
-        item.setDue(Integer.parseInt(partsOfLine.get(2)), Integer.parseInt(partsOfLine.get(3)),
-                Integer.parseInt(partsOfLine.get(4)));
-        item.setStatus(partsOfLine.get(5));
-        list.add(item);
+    public Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
+        item.setKeyword(partsOfLine.get(0));
+        item.setNumber(Integer.parseInt(partsOfLine.get(1)));
+        item.setTask(partsOfLine.get(2));
+        item.setDue(Integer.parseInt(partsOfLine.get(3)), Integer.parseInt(partsOfLine.get(4)),
+                Integer.parseInt(partsOfLine.get(5)));
+        item.setStatus(partsOfLine.get(6));
+        return item;
     }
 
     public static ArrayList<String> splitOnBar(String line) {

@@ -1,35 +1,42 @@
 package model;
 
-import exceptions.OverDueException;
+import ui.Main;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 
-import static ui.Main.todo;
+import static model.TodoList.*;
+import static ui.Main.*;
 
-public abstract class Item implements Serializable,Loadable,Saveable {
+
+public abstract class Item {
     protected int number;
+    protected String keyword;
     protected String task;
     protected LocalDate dueDate;
     protected String status;
+    protected ArrayList<TodoList> lists;
+
 
     // MODIFIES: this
     // EFFECTS: creates an entry with number of 0 and takes a string as a parameter which becomes the item
     public Item() {
         this.number = 0;
+        this.keyword = "";
         this.task = "";
         this.status = "not done";
+        this.lists = new ArrayList<>();
     }
 
     // MODIFIES: this
     // EFFECTS: sets the number of the entry to an int number
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     // MODIFIES: this
@@ -56,6 +63,10 @@ public abstract class Item implements Serializable,Loadable,Saveable {
         return number;
     }
 
+    public String getKeyword() {
+        return this.keyword;
+    }
+
     // EFFECTS: returns the item of the entry it is called on
     public String getTask() {
         return task;
@@ -74,16 +85,79 @@ public abstract class Item implements Serializable,Loadable,Saveable {
     // REQUIRES: the entry is in the todo list
     // EFFECTS: returns the number and item of the entry
     public String todoGetItem() {
-        return number + ". " + task + " due:" + dueDate + " " + status + " (to do)";
+        return number + ". " + task + " due:" + dueDate + " " + status + " Keyword: " + keyword;
     }
 
     // REQUIRES: the entry is in the crossedOff list
     // EFFECTS: returns the number and item of the entry
     public String crossedOffGetItem() {
-        return number + ". " + task + " due:" + dueDate + " " + status + " (crossed off)";
+        return number + ". " + keyword + " " + task + " due:" + dueDate + " " + status;
     }
 
-//    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
+    public void addList(TodoList t) {
+        if (!lists.contains(t)) {
+            lists.add(t);
+            t.addExamPrep(this);
+        }
+    }
+
+    public void removeList(TodoList t) {
+        if (lists.contains(t)) {
+            lists.remove(t);
+            t.removeExamPrep(this);
+        }
+    }
+
+    public String returnNumberOfItemsLeft() {
+        String print = "";
+        for (TodoList list: lists) {
+            if (list.equals(Main.examPrep)) {
+                print = print + "by crossing off this item, you have " + (getExamPrepSize() - 1)
+                        + " items in the exam prep list";
+            }
+        }
+        return print;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Item item = (Item) o;
+        return Objects.equals(task, item.task) && Objects.equals(dueDate, item.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(task, dueDate);
+    }
+
+    //    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        Item item = (Item) o;
+//        return number == item.number
+//                && Objects.equals(keyword, item.keyword)
+//                && Objects.equals(task, item.task)
+//                && Objects.equals(dueDate, item.dueDate)
+//                && Objects.equals(status, item.status);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(number, keyword, task, dueDate, status);
+//    }
+
+    //    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
 //        FileInputStream fis = new FileInputStream("./data/file");
 //        ObjectInputStream ois = new ObjectInputStream(fis);
 //        ArrayList<Item> todo = (ArrayList<Item>) ois.readObject();

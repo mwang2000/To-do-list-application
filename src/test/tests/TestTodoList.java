@@ -9,6 +9,9 @@ import model.RegularItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTodoList {
@@ -17,6 +20,8 @@ public class TestTodoList {
     private RegularItem entry;
     private RegularItem entry2;
     private UrgentItem entry3;
+    private Map<String,Item> todoMap;
+    private TodoList tl;
 
     @BeforeEach
     public void runBefore() {
@@ -26,15 +31,17 @@ public class TestTodoList {
         entry2.setTask("def");
         entry3 = new UrgentItem();
         entry3.setTask("ghi");
-        testTodo = new ArrayList<>();
+        testTodo = new ArrayList<>(todoMap.values());
         testCrossedOff = new ArrayList<>();
+        todoMap = new HashMap<>();
+        tl = new TodoList();
     }
 
     @Test
     public void testMoveItemEmptyCrossedOff() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
-        TodoList.moveItem(1,testTodo,testCrossedOff);
+        todoMap.put("a",entry);
+        todoMap.put("b",entry2);
+        tl.moveItem("a");
         entry.setNumber(0);
         assertEquals(1,testTodo.size());
         assertTrue(testTodo.contains(entry2));
@@ -44,10 +51,10 @@ public class TestTodoList {
 
     @Test
     public void testMoveItemNotEmptyCrossedOff() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
+        todoMap.put("a",entry);
+        todoMap.put("b",entry2);
         testCrossedOff.add(entry3);
-        TodoList.moveItem(2,testTodo,testCrossedOff);
+        tl.moveItem("b");
         entry2.setNumber(0);
         assertEquals(1,testTodo.size());
         assertTrue(testTodo.contains(entry));
@@ -57,9 +64,9 @@ public class TestTodoList {
 
     @Test
     public void testMoveItemUrgentItem() {
-        testTodo.add(entry3);
+        todoMap.put("c",entry3);
         testCrossedOff.add(entry);
-        TodoList.moveItem(1,testTodo,testCrossedOff);
+        tl.moveItem("c");
         entry3.setNumber(0);
         assertEquals(0,testTodo.size());
         assertEquals(2,testCrossedOff.size());
@@ -69,7 +76,7 @@ public class TestTodoList {
     @Test
     public void testReturnTodoEmpty() {
         assertEquals("Nothing in the to do list.",
-                TodoList.returnTodoList(testTodo));
+                TodoList.returnTodoList());
     }
 
 //    @Test
@@ -82,30 +89,30 @@ public class TestTodoList {
 
     @Test
     public void testReturnTodoRegular() {
-        testTodo.add(entry);
+        todoMap.put("a",entry);
         entry.setDue(2019,10,20);
-        assertEquals("0. abc due:2019-10-20 not done (to do)",TodoList.returnTodoList(testTodo));
+        assertEquals("0. abc due:2019-10-20 not done (to do)",TodoList.returnTodoList());
     }
 
     @Test
     public void testReturnTodoUrgent() {
-        testTodo.add(entry3);
+        todoMap.put("c",entry3);
         entry3.setDue(2019,10,20);
         assertEquals("0. ghi due:2019-10-20 not done (to do)\nThere are 6 days until this task is due.",
-                TodoList.returnTodoList(testTodo));
+                TodoList.returnTodoList());
     }
 
     @Test
     public void testReturnTodoException() {
-        testTodo.add(entry3);
+        todoMap.put("c",entry3);
         entry3.setDue(2019,10,10);
         assertEquals("0. ghi due:2019-10-10 not done (to do)\nThis item is overdue!",
-                TodoList.returnTodoList(testTodo));
+                TodoList.returnTodoList());
     }
 
     @Test
     public void testReturnCrossedOffEmpty() {
-        assertEquals("\nNothing in the crossed off list.",TodoList.returnCrossedOffList(testCrossedOff));
+        assertEquals("\nNothing in the crossed off list.",TodoList.returnCrossedOffList());
     }
 
     @Test
@@ -117,17 +124,17 @@ public class TestTodoList {
         entry.setDue(2019,10,31);
         entry3.setDue(2019,10,10);
         assertEquals("\n0. abc due:2019-10-31 done (crossed off)\n0. ghi due:2019-10-10 done (crossed off)",
-                TodoList.returnCrossedOffList(testCrossedOff));
+                TodoList.returnCrossedOffList());
     }
 
     @Test
     void testSaveLoad() throws IOException {
         TodoList tl = new TodoList();
-        entry.setDue(2020,05,25);
+        entry.setDue(2020, 5,25);
         testTodo.add(entry);
         entry3.setDue(2019,10,31);
         testTodo.add(entry3);
-        tl.save(testTodo);
-        assertEquals(testTodo,tl.load(testTodo));
+        tl.save();
+        assertEquals(testTodo,tl.load(todoMap));
     }
 }
