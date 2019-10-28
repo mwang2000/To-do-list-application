@@ -14,7 +14,7 @@ public abstract class Item {
     protected String task;
     protected LocalDate dueDate;
     protected String status;
-    protected ArrayList<ArrayList<Item>> lists;
+    protected TodoList onList;
 
 
     // MODIFIES: this
@@ -24,7 +24,6 @@ public abstract class Item {
         this.keyword = "";
         this.task = "";
         this.status = "not done";
-        this.lists = new ArrayList<>();
     }
 
     // MODIFIES: this
@@ -80,8 +79,8 @@ public abstract class Item {
         return dueDate;
     }
 
-    public ArrayList<ArrayList<Item>> getLists() {
-        return lists;
+    public TodoList getList() {
+        return onList;
     }
 
     // REQUIRES: the entry is in the todo list
@@ -93,32 +92,27 @@ public abstract class Item {
     // REQUIRES: the entry is in the crossedOff list
     // EFFECTS: returns the number and item of the entry
     public String crossedOffGetItem() {
-        return number + ". " + keyword + " " + task + " due:" + dueDate + " " + status;
+        return task + " due:" + dueDate + " " + status;
     }
 
-    public void addList(ArrayList<Item> t) {
-        if (!lists.contains(t)) {
-            lists.add(t);
-            TodoList tl = new TodoList();
-            tl.addExamPrep(this,examPrep);
+    public void addList(TodoList t) {
+        if (!(onList == t)) {
+            onList = t;
+            t.addExamPrep(this);
         }
     }
 
     public void removeList(TodoList t) {
-        if (lists.contains(t)) {
-            lists.remove(t);
+        if (onList == t) {
+            onList = null;
             t.removeExamPrep(this);
         }
     }
 
-    public String returnNumberOfItemsLeft(ArrayList<Item> examprep) {
+    public String returnNumberOfItemsLeft() {
         String print = "";
-        for (ArrayList<Item> list: lists) {
-            if (list.equals(examPrep)) {
-                print = print + "by crossing off this item, you have " + (examprep.size() - 1)
-                        + " items in the exam prep list";
-            }
-        }
+        print = print + "by crossing off this item, you have " + (onList.todoListSize() - 1)
+                + " items in the exam prep list";
         return print;
     }
 
@@ -138,32 +132,4 @@ public abstract class Item {
     public int hashCode() {
         return Objects.hash(task, dueDate);
     }
-
-
-    //    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
-//        FileInputStream fis = new FileInputStream("./data/file");
-//        ObjectInputStream ois = new ObjectInputStream(fis);
-//        ArrayList<Item> todo = (ArrayList<Item>) ois.readObject();
-//        ois.close();
-//        return todo;
-//    }
-
-//    public ArrayList<Item> load() throws IOException {
-//        File file = new File(String.valueOf(Paths.get("./data/file")));
-//        List<String> lines = Files.readAllLines(Paths.get(String.valueOf(file)));
-//        int i = 0;
-//        Item item = new RegularItem();
-//        while (lines != null) {
-//            item.setNumber(Integer.parseInt(lines.get(0)));
-//            item.setTask(lines.get(1));
-//            item.setDueDate();
-//        }
-//    }
-
-//    public void save() throws IOException {
-//        FileOutputStream fos = new FileOutputStream("./data/file");
-//        ObjectOutputStream oos = new ObjectOutputStream(fos);
-//        oos.writeObject(todo);
-//        oos.close();
-//    }
 }

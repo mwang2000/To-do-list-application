@@ -9,16 +9,16 @@ import java.util.*;
 import static model.TodoList.*;
 
 public class Main {
-    public static ArrayList<Item> todo;
-    public static ArrayList<Item> crossedOff;
-    public static ArrayList<Item> examPrep;
+    private static TodoList todo;
+    private static TodoList crossedOff;
+    private static TodoList examPrep;
     private static Scanner scanner = new Scanner(System.in);
     public static Map<String,Item> todoMap = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
-        todo = new ArrayList<>();
-        examPrep = new ArrayList<>();
-        crossedOff = new ArrayList<>();
+        todo = new TodoList();
+        crossedOff = new TodoList();
+        examPrep = new TodoList();
         run();
     }
 
@@ -27,8 +27,7 @@ public class Main {
     // EFFECTS: adds and removes entries in todo and crossedOff lists and prints lists according to the functions
     // required by the user
     public static void run() throws IOException {
-        TodoList tl = new TodoList();
-        loadTodo(tl);
+        loadTodo(todo);
         while (true) {
             int choice = welcome();
             if (choice == 1) {
@@ -40,7 +39,7 @@ public class Main {
             } else if (choice == 4) {
                 printLists();
             } else {
-                tl.save();
+                todo.save();
                 break;
             }
         }
@@ -54,8 +53,7 @@ public class Main {
             System.out.println("Would you like to add this item to the exam prep list as well? "
                     + "Enter [1] for yes, [2] for no.");
             if (scanner.nextInt() == 1) {
-                TodoList tl = new TodoList();
-                tl.addExamPrep(item,examPrep);
+                examPrep.addExamPrep(item);
             }
         } catch (TooManyThingsToDoException t) {
             System.out.println("Too many tasks to do! Finish some tasks first.");
@@ -72,17 +70,15 @@ public class Main {
             System.out.println("Would you like to add this item to the exam prep list as well? "
                     + "Enter [1] for yes, [2] for no.");
             if (scanner.nextInt() == 1) {
-                TodoList tl = new TodoList();
-                tl.addExamPrep(item,examPrep);
+                examPrep.addExamPrep(item);
             }
+            updateTodo(todoMap);
         } catch (TooManyThingsToDoException t) {
             System.out.println("Too many tasks to do! Finish some tasks first.");
         } finally {
             System.out.println("\nThe to-do list is:" + returnTodoList());
         }
     }
-
-
 
     //MODIFIES: this
     //EFFECTS: returns the next integer entered by the user as their choice
@@ -98,10 +94,10 @@ public class Main {
     // MODIFIES: this
     // EFFECTS: adds an entry into the todo list consisting of the item and its number
     public static void setItem(Item item) throws TooManyThingsToDoException {
-        if (todo.size() == MAX_TODO_SIZE) {
+        if (todoListSize() == MAX_TODO_SIZE) {
             throw new TooManyThingsToDoException();
         }
-        item.setNumber(todo.size() + 1);
+        item.setNumber(todoListSize() + 1);
         System.out.println("Enter the unique keyword for the task.");
         String key = scanner.nextLine();
         item.setKeyword(key);
@@ -113,9 +109,7 @@ public class Main {
         int d = scanner.nextInt();
         item.setDue(y, m, d);
         todoMap.put(key,item);
-        updateTodo(todoMap);
     }
-
 
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
@@ -123,9 +117,8 @@ public class Main {
         System.out.println("Which item would you like to cross off (enter its keyword)?");
         String removing = scanner.nextLine();
         Item removedItem = todoMap.get(removing);
-        System.out.println(removedItem.returnNumberOfItemsLeft(examPrep));
-        TodoList tl = new TodoList();
-        tl.moveItem(removing);
+        System.out.println(removedItem.returnNumberOfItemsLeft());
+        todo.moveItem(removing,todoMap);
     }
 
     // EFFECTS: prints both lists

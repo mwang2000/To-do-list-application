@@ -10,14 +10,12 @@ import model.RegularItem;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestItem {
-    private ArrayList<Item> testTodo;
+    private TodoList testTodo;
     private RegularItem entry;
     private UrgentItem entry2;
-    private TodoList testTodoList;
 
     @BeforeEach
     public void runBefore() {
@@ -30,15 +28,24 @@ public class TestItem {
         entry2.setKeyword("d");
         entry2.setDue(2020,1,1);
         entry2.setTask("def");
-        testTodo = new ArrayList<>();
-        testTodoList = new TodoList();
+        testTodo = new TodoList();
+    }
+
+    @Test
+    public void testConstructor() {
+        Item i = new RegularItem();
+        assertEquals(0, i.getNumber());
+        assertEquals("",i.getTask());
+        assertEquals("",i.getKeyword());
+        assertEquals("not done",i.getStatus());
+        assertEquals(null,i.getList());
     }
 
     @Test
     public void testSetNumber() {
-        testTodo.add(entry);
+        testTodo.addTodo(entry);
         entry.setNumber(3);
-        testTodo.add(entry2);
+        testTodo.addTodo(entry2);
         entry2.setNumber(8);
         assertEquals(3, entry.getNumber());
         assertEquals(8, entry2.getNumber());
@@ -46,16 +53,16 @@ public class TestItem {
 
     @Test
     public void testSetItem() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
+        testTodo.addTodo(entry);
+        testTodo.addTodo(entry2);
         assertEquals("abc", entry.getTask());
         assertEquals("def", entry2.getTask());
     }
 
     @Test
     public void testSetStatus() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
+        testTodo.addTodo(entry);
+        testTodo.addTodo(entry2);
         entry.setStatus("done");
         entry2.setStatus("not done");
         assertEquals("done", entry.getStatus());
@@ -64,36 +71,36 @@ public class TestItem {
 
     @Test
     public void testSetDueDate() {
-        testTodo.add(entry2);
+        testTodo.addTodo(entry2);
         entry.setDue(2019,10,10);
         assertEquals(LocalDate.of(2019,10,10),entry.getDue());
     }
 
     @Test
     public void testGetNumber() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
+        testTodo.addTodo(entry);
+        testTodo.addTodo(entry2);
         assertEquals(1, entry.getNumber());
         assertEquals(2, entry2.getNumber());
     }
 
     @Test
     public void testGetItem() {
-        testTodo.add(entry);
-        testTodo.add(entry2);
+        testTodo.addTodo(entry);
+        testTodo.addTodo(entry2);
         assertEquals("abc", entry.getTask());
         assertEquals("def", entry2.getTask());
     }
 
     @Test
     public void testGetStatus() {
-        testTodo.add(entry);
+        testTodo.addTodo(entry);
         assertEquals("not done", entry.getStatus());
     }
 
     @Test
     public void testGetDueDate() {
-        testTodo.add(entry);
+        TodoList.addTodo(entry);
         assertEquals(LocalDate.of(2019,12,31), entry.getDue());
     }
 
@@ -104,7 +111,7 @@ public class TestItem {
 
     @Test
     public void testCrossedOffGetItem() {
-        assertEquals("1. a abc due:2019-12-31 not done",entry.crossedOffGetItem());
+        assertEquals("abc due:2019-12-31 not done",entry.crossedOffGetItem());
     }
 
     @Test
@@ -116,45 +123,54 @@ public class TestItem {
     @Test
     public void testAddList() {
         entry.addList(testTodo);
-        assertTrue(entry.getLists().contains(testTodo));
-        assertEquals(1, entry.getLists().size());
+        assertTrue(entry.getList() == testTodo);
     }
 
     @Test
-    public void testAddListNoNew() {
+    public void testAddListAlready() {
         entry.addList(testTodo);
         entry.addList(testTodo);
-        assertTrue(entry.getLists().contains(testTodoList));
-        assertEquals(1, entry.getLists().size());
+        assertTrue(entry.getList() == testTodo);
     }
 
     @Test
     public void testRemoveList() {
         entry.addList(testTodo);
-        entry.removeList(testTodoList);
-        assertEquals(0,entry.getLists().size());
+        entry.removeList(testTodo);
+        assertEquals(null,entry.getList());
     }
 
     @Test
     public void testRemoveListNo() {
-        entry.removeList(testTodoList);
-        assertEquals(0,entry.getLists().size());
+        entry.addList(testTodo);
+        TodoList test = new TodoList();
+        entry.removeList(test);
+        assertTrue(entry.getList() == testTodo);
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsTrue() {
         Item entry3 = new RegularItem();
         entry3.setTask("abc");
         entry3.setDue(2019,12,31);
-        assertTrue(entry.equals(entry3));
+        assertEquals(entry, entry3);
     }
 
     @Test
-    public void testHashCode() {
+    public void testEqualsFalse() {
+        assertNotEquals(entry, entry2);
+    }
+
+    @Test
+    public void testHashCodeMatch() {
         Item entry3 = new RegularItem();
         entry3.setTask("abc");
         entry3.setDue(2019,12,31);
         assertEquals(entry.hashCode(),entry3.hashCode());
     }
-}
 
+    @Test
+    public void testHashCodeDifferent() {
+        assertFalse(entry.hashCode() == entry2.hashCode());
+    }
+}

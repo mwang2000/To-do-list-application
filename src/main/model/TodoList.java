@@ -13,12 +13,37 @@ import static ui.Main.*;
 
 public class TodoList implements Saveable,Loadable {
     public static int MAX_TODO_SIZE = 3;
+    public static ArrayList<Item> todo;
+    public static ArrayList<Item> crossedOff;
+    public static ArrayList<Item> examPrep;
+
+    public TodoList() {
+        todo = new ArrayList<>();
+        crossedOff = new ArrayList<>();
+        examPrep = new ArrayList<>();
+    }
 
     public static void updateTodo(Map<String,Item> map) {
         todo = new ArrayList<>(map.values());
     }
 
-    public void addExamPrep(Item i,ArrayList<Item> examPrep) {
+    public static int todoListSize() {
+        return todo.size();
+    }
+
+    public static boolean todoListContains(Item i) {
+        return todo.contains(i);
+    }
+
+    public static void addTodo(Item i) {
+        todo.add(i);
+    }
+
+    public static void addCrossedOff(Item i) {
+        crossedOff.add(i);
+    }
+
+    public void addExamPrep(Item i) {
         if (!examPrep.contains(i)) {
             if (i instanceof UrgentItem) {
                 Item e = new UrgentItem();
@@ -31,7 +56,7 @@ public class TodoList implements Saveable,Loadable {
                 e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
                 examPrep.add(e);
             }
-            i.addList(examPrep);
+            i.addList(this);
         }
     }
 
@@ -65,7 +90,7 @@ public class TodoList implements Saveable,Loadable {
         } else {
             String print = "";
             for (Item e : crossedOff) {
-                print = print + e.crossedOffGetItem();
+                print = print + e.crossedOffGetItem() + "\n";
             }
             return "\nThe crossed off list is\n" + print;
         }
@@ -83,11 +108,10 @@ public class TodoList implements Saveable,Loadable {
         }
     }
 
-
-    //MODIFIES: todo,crossedOff
-    //EFFECTS: moves an item from todo to crossedOff and changes the status to "done"
-    public void moveItem(String removing) {
-        Item removedItem = todoMap.get(removing);
+    //MODIFIES: todoMap,todo,crossedOff
+    //EFFECTS: moves an item from todoMap and examPrep ,if applicable, to crossedOff and changes the status to "done"
+    public void moveItem(String removing, Map<String, Item> map) {
+        Item removedItem = map.get(removing);
         if (examPrep.contains(removedItem)) {
             removeExamPrep(removedItem);
         }
@@ -105,42 +129,23 @@ public class TodoList implements Saveable,Loadable {
         }
     }
 
-    //EFFECTS: adds regular item to todo list unless there are too many items in todo
-//    public static boolean option1(ArrayList<Item> todo) {
-//        try {
-//            addRegularItem(todo);
-//        } catch (TooManyThingsToDoException t) {
-//            System.out.println("There are too many things to do! Finish some tasks first.");
-//            return false;
-//        }
-//        return true;
-//    }
-
-//    public static void addTodo(ArrayList<Item> todo, Item item) throws TooManyThingsToDoException {
-//        if (todo.size() == MAX_TODO_SIZE) {
-//            throw new TooManyThingsToDoException();
-//        }
-//        todo.add(item);
-//    }
-
-    //EFFECTS: adds urgentItem to todo list unless there are too many items in todo
-//    public static boolean option2(ArrayList<Item> todo) {
-//        try {
-//            addUrgentItem(todo);
-//        } catch (TooManyThingsToDoException t) {
-//            System.out.println("There are too many things to do! Finish some tasks first.");
-//            return false;
-//        }
-//        return true;
-//    }
-
     public void save() throws FileNotFoundException {
         File file = new File(String.valueOf(Paths.get("./data/file")));
         PrintWriter printWriter = new PrintWriter(file);
         for (Map.Entry<String,Item> i : todoMap.entrySet()) {
             printWriter.println(i.getKey() + "_" + saveTodo(i.getValue()));
         }
+        printWriter.println(saveExamPrep());
         printWriter.close();
+    }
+
+    public static String saveExamPrep() {
+        String print = "";
+        for (Item i : examPrep) {
+            print = print + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
+                    + i.getDue().getDayOfMonth() + "\n";
+        }
+        return print;
     }
 
     public String saveTodo(Item i) {
@@ -177,9 +182,15 @@ public class TodoList implements Saveable,Loadable {
             if (partsOfLine.size() == 8) {
                 Item item = new UrgentItem();
                 map.put(partsOfLine.get(0),retrieveItemFields(partsOfLine,item));
-            } else {
+            } else if (partsOfLine.size() == 7) {
                 Item item = new RegularItem();
                 map.put(partsOfLine.get(0),retrieveItemFields(partsOfLine,item));
+            } else {
+                Item item = new UrgentItem();
+                item.setTask(partsOfLine.get(0));
+                item.setDue(Integer.parseInt(partsOfLine.get(1)),Integer.parseInt(partsOfLine.get(2)),
+                        Integer.parseInt(partsOfLine.get(3)));
+                examPrep.add(item);
             }
         }
         return map;

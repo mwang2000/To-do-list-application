@@ -9,7 +9,6 @@ public class RegularItem extends Item {
         super();
     }
 
-
     // EFFECTS: returns a regular item to be printed
     public static String printRegularItem(String print, Item e) {
         if (print.equals("")) {
