@@ -6,9 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static model.TodoList.*;
 import static ui.Main.*;
-
 
 public abstract class Item {
     protected int number;
@@ -16,7 +14,7 @@ public abstract class Item {
     protected String task;
     protected LocalDate dueDate;
     protected String status;
-    protected ArrayList<TodoList> lists;
+    protected ArrayList<ArrayList<Item>> lists;
 
 
     // MODIFIES: this
@@ -82,6 +80,10 @@ public abstract class Item {
         return dueDate;
     }
 
+    public ArrayList<ArrayList<Item>> getLists() {
+        return lists;
+    }
+
     // REQUIRES: the entry is in the todo list
     // EFFECTS: returns the number and item of the entry
     public String todoGetItem() {
@@ -94,10 +96,11 @@ public abstract class Item {
         return number + ". " + keyword + " " + task + " due:" + dueDate + " " + status;
     }
 
-    public void addList(TodoList t) {
+    public void addList(ArrayList<Item> t) {
         if (!lists.contains(t)) {
             lists.add(t);
-            t.addExamPrep(this);
+            TodoList tl = new TodoList();
+            tl.addExamPrep(this,examPrep);
         }
     }
 
@@ -108,11 +111,11 @@ public abstract class Item {
         }
     }
 
-    public String returnNumberOfItemsLeft() {
+    public String returnNumberOfItemsLeft(ArrayList<Item> examprep) {
         String print = "";
-        for (TodoList list: lists) {
-            if (list.equals(Main.examPrep)) {
-                print = print + "by crossing off this item, you have " + (getExamPrepSize() - 1)
+        for (ArrayList<Item> list: lists) {
+            if (list.equals(examPrep)) {
+                print = print + "by crossing off this item, you have " + (examprep.size() - 1)
                         + " items in the exam prep list";
             }
         }
@@ -136,26 +139,6 @@ public abstract class Item {
         return Objects.hash(task, dueDate);
     }
 
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        Item item = (Item) o;
-//        return number == item.number
-//                && Objects.equals(keyword, item.keyword)
-//                && Objects.equals(task, item.task)
-//                && Objects.equals(dueDate, item.dueDate)
-//                && Objects.equals(status, item.status);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(number, keyword, task, dueDate, status);
-//    }
 
     //    public ArrayList<Item> load() throws IOException, ClassNotFoundException {
 //        FileInputStream fis = new FileInputStream("./data/file");

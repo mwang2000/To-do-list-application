@@ -9,33 +9,16 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import static ui.Main.todoMap;
+import static ui.Main.*;
 
 public class TodoList implements Saveable,Loadable {
-    public static ArrayList<Item> todo;
-    public static ArrayList<Item> crossedOff;
-    public static ArrayList<Item> examPrep;
     public static int MAX_TODO_SIZE = 3;
-
-    public TodoList() {
-        todo = new ArrayList<>();
-        crossedOff = new ArrayList<>();
-        examPrep = new ArrayList<>();
-    }
-
-    public static int getTodoSize() {
-        return todo.size();
-    }
-
-    public static int getExamPrepSize() {
-        return examPrep.size();
-    }
 
     public static void updateTodo(Map<String,Item> map) {
         todo = new ArrayList<>(map.values());
     }
 
-    public void addExamPrep(Item i) {
+    public void addExamPrep(Item i,ArrayList<Item> examPrep) {
         if (!examPrep.contains(i)) {
             if (i instanceof UrgentItem) {
                 Item e = new UrgentItem();
@@ -48,7 +31,7 @@ public class TodoList implements Saveable,Loadable {
                 e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
                 examPrep.add(e);
             }
-            i.addList(this);
+            i.addList(examPrep);
         }
     }
 

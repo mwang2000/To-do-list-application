@@ -15,8 +15,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTodoList {
-    private ArrayList<Item> testTodo;
+    private ArrayList<Item> todo;
     private ArrayList<Item> testCrossedOff;
+    private ArrayList<Item> examPrep;
     private RegularItem entry;
     private RegularItem entry2;
     private UrgentItem entry3;
@@ -27,15 +28,40 @@ public class TestTodoList {
     public void runBefore() {
         entry = new RegularItem();
         entry.setTask("abc");
+        entry.setDue(2019,12,31);
         entry2 = new RegularItem();
         entry2.setTask("def");
         entry3 = new UrgentItem();
         entry3.setTask("ghi");
-        testTodo = new ArrayList<>(todoMap.values());
         testCrossedOff = new ArrayList<>();
         todoMap = new HashMap<>();
+        todoMap.put("a",entry);
+        todo = new ArrayList<>(todoMap.values());
         tl = new TodoList();
+        examPrep = new ArrayList<>();
     }
+
+//    @Test
+//    public void testUpdateTodo() {
+//        TodoList.updateTodo(todoMap);
+//        assertTrue(todo.contains(entry));
+//        assertEquals(1,todo.size());
+//    }
+
+//    @Test
+//    public void testAddExamPrep() {
+//        Item e = new RegularItem();
+//        e.setTask(entry.getTask());
+//        e.setDue(entry.getDue().getYear(),entry.getDue().getMonthValue(),entry.getDue().getDayOfMonth());
+//        tl.addExamPrep(entry,examPrep);
+//        Item i = new UrgentItem();
+//        e.setTask(entry3.getTask());
+//        e.setDue(entry3.getDue().getYear(),entry3.getDue().getMonthValue(),entry3.getDue().getDayOfMonth());
+//        tl.addExamPrep(entry3,examPrep);
+//        assertTrue(examPrep.contains(e));
+//        assertTrue(examPrep.contains(i));
+//        assertEquals(2,examPrep.size());
+//    }
 
     @Test
     public void testMoveItemEmptyCrossedOff() {
@@ -43,8 +69,8 @@ public class TestTodoList {
         todoMap.put("b",entry2);
         tl.moveItem("a");
         entry.setNumber(0);
-        assertEquals(1,testTodo.size());
-        assertTrue(testTodo.contains(entry2));
+        assertEquals(1, todo.size());
+        assertTrue(todo.contains(entry2));
         assertEquals(1,testCrossedOff.size());
         assertTrue(testCrossedOff.contains(entry));
     }
@@ -56,8 +82,8 @@ public class TestTodoList {
         testCrossedOff.add(entry3);
         tl.moveItem("b");
         entry2.setNumber(0);
-        assertEquals(1,testTodo.size());
-        assertTrue(testTodo.contains(entry));
+        assertEquals(1, todo.size());
+        assertTrue(todo.contains(entry));
         assertEquals(2,testCrossedOff.size());
         assertTrue(testCrossedOff.contains(entry2));
     }
@@ -68,7 +94,7 @@ public class TestTodoList {
         testCrossedOff.add(entry);
         tl.moveItem("c");
         entry3.setNumber(0);
-        assertEquals(0,testTodo.size());
+        assertEquals(0, todo.size());
         assertEquals(2,testCrossedOff.size());
         assertTrue(testCrossedOff.contains(entry3));
     }
@@ -131,10 +157,10 @@ public class TestTodoList {
     void testSaveLoad() throws IOException {
         TodoList tl = new TodoList();
         entry.setDue(2020, 5,25);
-        testTodo.add(entry);
+        todo.add(entry);
         entry3.setDue(2019,10,31);
-        testTodo.add(entry3);
+        todo.add(entry3);
         tl.save();
-        assertEquals(testTodo,tl.load(todoMap));
+        assertEquals(todo,tl.load(todoMap));
     }
 }
