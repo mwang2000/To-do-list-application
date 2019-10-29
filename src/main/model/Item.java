@@ -24,6 +24,7 @@ public abstract class Item {
         this.keyword = "";
         this.task = "";
         this.status = "not done";
+        this.onList = new TodoList();
     }
 
     // MODIFIES: this
@@ -104,14 +105,14 @@ public abstract class Item {
 
     public void removeList(TodoList t) {
         if (onList == t) {
-            onList = null;
+            onList = new TodoList();
             t.removeExamPrep(this);
         }
     }
 
     public String returnNumberOfItemsLeft() {
         String print = "";
-        print = print + "by crossing off this item, you have " + (onList.todoListSize() - 1)
+        print = print + "by crossing off this item, you have " + (TodoList.examPrep.size() - 1)
                 + " items in the exam prep list";
         return print;
     }

@@ -149,6 +149,14 @@ public class TestItem {
     }
 
     @Test
+    public void testReturnNumberOfItemsLeft() {
+        testTodo.addTodo(entry2);
+        entry.addList(testTodo);
+        assertEquals("by crossing off this item, you have 0 items in the exam prep list",
+                entry.returnNumberOfItemsLeft());
+    }
+
+    @Test
     public void testEqualsTrue() {
         Item entry3 = new RegularItem();
         entry3.setTask("abc");

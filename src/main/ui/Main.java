@@ -55,6 +55,7 @@ public class Main {
             if (scanner.nextInt() == 1) {
                 examPrep.addExamPrep(item);
             }
+            updateTodo(todoMap);
         } catch (TooManyThingsToDoException t) {
             System.out.println("Too many tasks to do! Finish some tasks first.");
         } finally {
@@ -94,10 +95,10 @@ public class Main {
     // MODIFIES: this
     // EFFECTS: adds an entry into the todo list consisting of the item and its number
     public static void setItem(Item item) throws TooManyThingsToDoException {
-        if (todoListSize() == MAX_TODO_SIZE) {
+        if (TodoList.todo.size() == MAX_TODO_SIZE) {
             throw new TooManyThingsToDoException();
         }
-        item.setNumber(todoListSize() + 1);
+        item.setNumber(TodoList.todo.size() + 1);
         System.out.println("Enter the unique keyword for the task.");
         String key = scanner.nextLine();
         item.setKeyword(key);
@@ -117,8 +118,10 @@ public class Main {
         System.out.println("Which item would you like to cross off (enter its keyword)?");
         String removing = scanner.nextLine();
         Item removedItem = todoMap.get(removing);
-        System.out.println(removedItem.returnNumberOfItemsLeft());
-        todo.moveItem(removing,todoMap);
+        if (removedItem.getList().equals(new TodoList())) {
+            System.out.println(removedItem.returnNumberOfItemsLeft());
+        }
+        todo.moveItem(removing,todoMap,crossedOff);
     }
 
     // EFFECTS: prints both lists

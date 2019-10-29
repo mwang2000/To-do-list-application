@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTodoList {
     private TodoList todo;
-    private TodoList testCrossedOff;
+    private TodoList crossedOff;
     private TodoList examPrep;
     private RegularItem entry;
     private RegularItem entry2;
@@ -34,7 +33,7 @@ public class TestTodoList {
         entry3 = new UrgentItem();
         entry3.setTask("ghi");
         entry3.setDue(2019,12,1);
-        testCrossedOff = new TodoList();
+        crossedOff = new TodoList();
         todoMap = new HashMap<>();
         todoMap.put("a",entry);
         todo = new TodoList();
@@ -44,8 +43,8 @@ public class TestTodoList {
     @Test
     public void testUpdateTodo() {
         TodoList.updateTodo(todoMap);
-        assertTrue(todo.todoListContains(entry));
-        assertEquals(1,todo.todoListSize());
+        assertTrue(TodoList.todo.contains(entry));
+        assertEquals(1,TodoList.todo.size());
     }
 
 //    @Test
@@ -54,52 +53,56 @@ public class TestTodoList {
 //        e.setTask(entry.getTask());
 //        e.setDue(entry.getDue().getYear(),entry.getDue().getMonthValue(),entry.getDue().getDayOfMonth());
 //        examPrep.addExamPrep(entry);
-//        assertTrue(examPrep.todoListContains(e));
-//        assertTrue(e.getList() == examPrep);
+//        assertTrue(TodoList.examPrep.contains(entry));
+//        assertTrue(entry.getList().equals(examPrep));
 //        Item i = new UrgentItem();
-//        e.setTask(entry3.getTask());
-//        e.setDue(entry3.getDue().getYear(),entry3.getDue().getMonthValue(),entry3.getDue().getDayOfMonth());
+//        i.setTask(entry3.getTask());
+//        i.setDue(entry3.getDue().getYear(),entry3.getDue().getMonthValue(),entry3.getDue().getDayOfMonth());
 //        examPrep.addExamPrep(entry3);
-//        assertTrue(examPrep.todoListContains(i));
-//        assertEquals(2,examPrep.todoListSize());
+//        assertTrue(TodoList.examPrep.contains(entry3));
+//        assertEquals(2, TodoList.examPrep.size());
 //    }
 
-//    @Test
-//    public void testMoveItemEmptyCrossedOff() {
-//        todoMap.put("a",entry);
-//        todoMap.put("b",entry2);
-//        todo.updateTodo(todoMap);
-//        testCrossedOff.moveItem("a",todoMap);
-//        entry.setNumber(0);
-//        assertEquals(1, todo.todoListSize());
-//        assertTrue(todo.todoListContains(entry2));
-//        assertEquals(1,testCrossedOff.todoListSize());
-//        assertTrue(testCrossedOff.todoListContains(entry));
-//    }
+    @Test
+    public void testMoveItemEmptyCrossedOff() {
+        todoMap.put("a",entry);
+        todoMap.put("b",entry2);
+        todoMap.put("c",entry3);
+        TodoList.updateTodo(todoMap);
+        crossedOff.moveItem("a",todoMap, crossedOff);
+        entry.setNumber(0);
+        assertEquals(2, TodoList.todo.size());
+        assertTrue(TodoList.todo.contains(entry2));
+        assertEquals(1, TodoList.crossedOff.size());
+        assertTrue(TodoList.crossedOff.contains(entry));
+    }
 
-//    @Test
-//    public void testMoveItemNotEmptyCrossedOff() {
-//        todoMap.put("a",entry);
-//        todoMap.put("b",entry2);
-//        testCrossedOff.addTodo(entry3);
-//        testCrossedOff.moveItem("b",todoMap);
-//        entry2.setNumber(0);
-//        assertEquals(1, todo.todoListSize());
-//        assertTrue(todo.todoListContains(entry));
-//        assertEquals(2,testCrossedOff.todoListSize());
-//        assertTrue(testCrossedOff.todoListContains(entry2));
-//    }
+    @Test
+    public void testMoveItemNotEmptyCrossedOff() {
+        todoMap.put("a",entry);
+        todoMap.put("b",entry2);
+        TodoList.updateTodo(todoMap);
+        TodoList.crossedOff.add(entry3);
+        crossedOff.moveItem("b",todoMap, crossedOff);
+        entry2.setNumber(0);
+        assertEquals(1, TodoList.todo.size());
+        assertTrue(TodoList.todo.contains(entry));
+        assertEquals(2, TodoList.crossedOff.size());
+        assertTrue(TodoList.crossedOff.contains(entry2));
+    }
 
-//    @Test
-//    public void testMoveItemUrgentItem() {
-//        todoMap.put("c",entry3);
-//        testCrossedOff.addTodo(entry);
-//        testCrossedOff.moveItem("c",todoMap);
-//        entry3.setNumber(0);
-//        assertEquals(0, todo.todoListSize());
-//        assertEquals(2,testCrossedOff.todoListSize());
-//        assertTrue(testCrossedOff.todoListContains(entry3));
-//    }
+    @Test
+    public void testMoveItemUrgentItem() {
+        todoMap.remove("a",entry);
+        todoMap.put("c",entry3);
+        TodoList.updateTodo(todoMap);
+        TodoList.crossedOff.add(entry);
+        crossedOff.moveItem("c",todoMap,crossedOff);
+        entry3.setNumber(0);
+        assertEquals(0,TodoList.todo.size());
+        assertEquals(2,TodoList.crossedOff.size());
+        assertTrue(TodoList.crossedOff.contains(entry3));
+    }
 
     @Test
     public void testReturnTodoEmpty() {
@@ -140,8 +143,8 @@ public class TestTodoList {
 
     @Test
     public void testReturnCrossedOffMultiple() {
-        TodoList.addCrossedOff(entry);
-        TodoList.addCrossedOff(entry3);
+        TodoList.crossedOff.add(entry);
+        TodoList.crossedOff.add(entry3);
         entry.setStatus("done");
         entry3.setStatus("done");
         entry.setDue(2019,10,31);

@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import static ui.Main.*;
+import static ui.Main.todoMap;
 
 public class TodoList implements Saveable,Loadable {
     public static int MAX_TODO_SIZE = 3;
@@ -27,20 +27,8 @@ public class TodoList implements Saveable,Loadable {
         todo = new ArrayList<>(map.values());
     }
 
-    public static int todoListSize() {
-        return todo.size();
-    }
-
-    public static boolean todoListContains(Item i) {
-        return todo.contains(i);
-    }
-
     public static void addTodo(Item i) {
         todo.add(i);
-    }
-
-    public static void addCrossedOff(Item i) {
-        crossedOff.add(i);
     }
 
     public void addExamPrep(Item i) {
@@ -110,16 +98,16 @@ public class TodoList implements Saveable,Loadable {
 
     //MODIFIES: todoMap,todo,crossedOff
     //EFFECTS: moves an item from todoMap and examPrep ,if applicable, to crossedOff and changes the status to "done"
-    public void moveItem(String removing, Map<String, Item> map) {
+    public void moveItem(String removing, Map<String, Item> map,TodoList crossedOff) {
         Item removedItem = map.get(removing);
         if (examPrep.contains(removedItem)) {
             removeExamPrep(removedItem);
         }
-        crossedOff.add(removedItem);
+        TodoList.crossedOff.add(removedItem);
         removedItem.setStatus("done");
         removedItem.setNumber(0);
-        todoMap.remove(removing);
-        updateTodo(todoMap);
+        map.remove(removing);
+        updateTodo(map);
     }
 
     public void removeExamPrep(Item i) {
