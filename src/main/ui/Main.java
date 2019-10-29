@@ -39,11 +39,13 @@ public class Main {
             } else if (choice == 4) {
                 printLists();
             } else {
-                todo.save();
+                todo.save(todoMap);
                 break;
             }
         }
     }
+
+
 
     //EFFECTS: catches TooManyThingsToDoException for UrgentItems
     public static void option2() {

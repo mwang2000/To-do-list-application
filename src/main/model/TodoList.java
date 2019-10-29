@@ -78,7 +78,7 @@ public class TodoList implements Saveable,Loadable {
         } else {
             String print = "";
             for (Item e : crossedOff) {
-                print = print + e.crossedOffGetItem() + "\n";
+                print = print + "\n" + e.crossedOffGetItem();
             }
             return "\nThe crossed off list is\n" + print;
         }
@@ -90,7 +90,7 @@ public class TodoList implements Saveable,Loadable {
         } else {
             String print = "";
             for (Item e : examPrep) {
-                print = print + e.task + " " + e.dueDate + "\n";
+                print = print + "\n" + e.task + " " + e.dueDate;
             }
             return "The exam prep list is:\n" + print;
         }
@@ -117,40 +117,23 @@ public class TodoList implements Saveable,Loadable {
         }
     }
 
-    public void save() throws FileNotFoundException {
+    public void save(Map<String,Item> map) throws FileNotFoundException {
         File file = new File(String.valueOf(Paths.get("./data/file")));
         PrintWriter printWriter = new PrintWriter(file);
-        for (Map.Entry<String,Item> i : todoMap.entrySet()) {
-            printWriter.println(i.getKey() + "_" + saveTodo(i.getValue()));
+        for (Map.Entry<String,Item> i : map.entrySet()) {
+            printWriter.println(i.getKey() + "_" + Item.saveTodo(i.getValue()));
         }
-        printWriter.println(saveExamPrep());
-        printWriter.close();
+        if (!examPrep.isEmpty()) {
+            printWriter.println(saveExamPrep());
+            printWriter.close();
+        }
     }
 
     public static String saveExamPrep() {
         String print = "";
         for (Item i : examPrep) {
             print = print + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
-                    + i.getDue().getDayOfMonth() + "\n";
-        }
-        return print;
-    }
-
-    public String saveTodo(Item i) {
-        String print = "";
-        if (i instanceof UrgentItem) {
-            try {
-                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
-                        + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
-                        + "_" + ((UrgentItem) i).timeLeft();
-            } catch (OverDueException e) {
-                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
-                        + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
-                        + "_" + "This item is overdue!";
-            }
-        } else {
-            print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
-                    + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus();
+                    + i.getDue().getDayOfMonth();
         }
         return print;
     }
@@ -184,7 +167,7 @@ public class TodoList implements Saveable,Loadable {
         return map;
     }
 
-    public Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
+    public static Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
         item.setKeyword(partsOfLine.get(0));
         item.setNumber(Integer.parseInt(partsOfLine.get(1)));
         item.setTask(partsOfLine.get(2));

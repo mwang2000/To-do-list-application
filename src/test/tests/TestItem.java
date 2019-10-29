@@ -157,6 +157,23 @@ public class TestItem {
     }
 
     @Test
+    public void testSaveTodoRegular() {
+        assertEquals("1_abc_2019_12_31_not done",Item.saveTodo(entry));
+    }
+
+    @Test
+    public void testSaveTodoUrgent() {
+        assertEquals("2_def_2020_1_1_not done_There are 64 days until this task is due.",
+                Item.saveTodo(entry2));
+    }
+
+    @Test
+    public void testSaveTodoUrgentOverdue() {
+        entry2.setDue(2019,10,10);
+        assertEquals("2_def_2019_10_10_not done_This item is overdue!", Item.saveTodo(entry2));
+    }
+
+    @Test
     public void testEqualsTrue() {
         Item entry3 = new RegularItem();
         entry3.setTask("abc");

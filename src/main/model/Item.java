@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.OverDueException;
 import ui.Main;
 
 import java.time.LocalDate;
@@ -114,6 +115,26 @@ public abstract class Item {
         String print = "";
         print = print + "by crossing off this item, you have " + (TodoList.examPrep.size() - 1)
                 + " items in the exam prep list";
+        return print;
+    }
+
+
+    public static String saveTodo(Item i) {
+        String print = "";
+        if (i instanceof UrgentItem) {
+            try {
+                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                        + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
+                        + "_" + ((UrgentItem) i).timeLeft();
+            } catch (OverDueException e) {
+                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                        + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
+                        + "_" + "This item is overdue!";
+            }
+        } else {
+            print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                    + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus();
+        }
         return print;
     }
 

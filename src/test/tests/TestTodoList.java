@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class TestTodoList {
     @BeforeEach
     public void runBefore() {
         entry = new RegularItem();
+        entry.setKeyword("a");
         entry.setTask("abc");
         entry.setDue(2019,12,31);
         entry.setStatus("not done");
@@ -47,21 +49,35 @@ public class TestTodoList {
         assertEquals(1,TodoList.todo.size());
     }
 
-//    @Test
-//    public void testAddExamPrep() {
-//        Item e = new RegularItem();
-//        e.setTask(entry.getTask());
-//        e.setDue(entry.getDue().getYear(),entry.getDue().getMonthValue(),entry.getDue().getDayOfMonth());
-//        examPrep.addExamPrep(entry);
-//        assertTrue(TodoList.examPrep.contains(entry));
-//        assertTrue(entry.getList().equals(examPrep));
-//        Item i = new UrgentItem();
-//        i.setTask(entry3.getTask());
-//        i.setDue(entry3.getDue().getYear(),entry3.getDue().getMonthValue(),entry3.getDue().getDayOfMonth());
-//        examPrep.addExamPrep(entry3);
-//        assertTrue(TodoList.examPrep.contains(entry3));
-//        assertEquals(2, TodoList.examPrep.size());
-//    }
+    @Test
+    public void testAddExamPrepRegular() {
+        Item e = new RegularItem();
+        e.setTask(entry.getTask());
+        e.setDue(entry.getDue().getYear(), entry.getDue().getMonthValue(), entry.getDue().getDayOfMonth());
+        examPrep.addExamPrep(entry);
+        assertTrue(TodoList.examPrep.contains(entry));
+        assertTrue(entry.getList().equals(examPrep));
+        assertEquals(1, TodoList.examPrep.size());
+    }
+
+    @Test
+    public void testAddExamPrepUrgent() {
+        Item i = new UrgentItem();
+        i.setTask(entry3.getTask());
+        i.setDue(entry3.getDue().getYear(),entry3.getDue().getMonthValue(),entry3.getDue().getDayOfMonth());
+        examPrep.addExamPrep(entry3);
+        assertTrue(TodoList.examPrep.contains(entry3));
+        assertTrue(entry3.getList().equals(examPrep));
+        assertEquals(1, TodoList.examPrep.size());
+    }
+
+    @Test
+    public void testAddExamPrepAlreadyIncluded() {
+        TodoList.examPrep.add(entry);
+        examPrep.addExamPrep(entry);
+        assertTrue(TodoList.examPrep.contains(entry));
+        assertEquals(1, TodoList.examPrep.size());
+    }
 
     @Test
     public void testMoveItemEmptyCrossedOff() {
@@ -146,6 +162,7 @@ public class TestTodoList {
         TodoList.crossedOff.add(entry);
         TodoList.crossedOff.add(entry3);
         entry.setStatus("done");
+        entry.setKeyword("a");
         entry3.setStatus("done");
         entry.setDue(2019,10,31);
         entry3.setDue(2019,10,10);
@@ -154,9 +171,57 @@ public class TestTodoList {
     }
 
     @Test
+    public void testReturnExamPrepEmpty() {
+        assertEquals("\nNothing in the exam prep list.",TodoList.returnExamPrep());
+    }
+
+    @Test
+    public void testReturnExamPrepNotEmpty() {
+        TodoList.examPrep.add(entry);
+        TodoList.examPrep.add(entry3);
+        assertEquals("The exam prep list is:\nabc 2019-12-31\nghi 2019-12-01\n",TodoList.returnExamPrep());
+    }
+
+    @Test
+    public void testRemoveExamPrep() {
+        examPrep.addExamPrep(entry);
+        examPrep.removeExamPrep(entry);
+        assertEquals(0,TodoList.examPrep.size());
+    }
+
+    @Test
     void testSaveLoad() throws IOException {
         todoMap.put("b",entry3);
-        todo.save();
+        todo.save(todoMap);
         assertEquals(todoMap,todo.load(todoMap));
+    }
+
+    @Test
+    public void testSaveExamPrep() {
+        TodoList.examPrep.add(entry);
+        TodoList.examPrep.add(entry3);
+        assertEquals("abc_2019_12_31\nghi_2019_12_1\n",TodoList.saveExamPrep());
+    }
+
+    @Test
+    public void testSaveExamPrepOverdue() {
+        TodoList.examPrep.add(entry3);
+        entry3.setDue(2019,10,10);
+        assertEquals("ghi_2019_10_10\n",TodoList.saveExamPrep());
+    }
+
+    @Test
+    public void testRetrieveItemFields() {
+        ArrayList<String> partsOfLine = new ArrayList<>();
+        partsOfLine.add("a");
+        partsOfLine.add("1");
+        partsOfLine.add("abc");
+        partsOfLine.add("2019");
+        partsOfLine.add("12");
+        partsOfLine.add("31");
+        partsOfLine.add("not done");
+        Item item = new RegularItem();
+        TodoList.retrieveItemFields(partsOfLine,item);
+        assertTrue(item.equals(entry));
     }
 }
