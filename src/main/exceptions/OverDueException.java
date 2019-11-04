@@ -1,4 +1,4 @@
 package exceptions;
 
-public class OverDueException extends InvalidDateException {
+public class OverDueException extends Exception {
 }

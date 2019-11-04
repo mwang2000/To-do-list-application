@@ -1,13 +1,9 @@
 package model;
 
 import exceptions.OverDueException;
-import ui.Main;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import static ui.Main.*;
 
 public abstract class Item {
     protected int number;
@@ -15,7 +11,8 @@ public abstract class Item {
     protected String task;
     protected LocalDate dueDate;
     protected String status;
-    protected TodoList onList;
+//    protected TodoList onList;
+    public static TodoList emptyList;
 
 
     // MODIFIES: this
@@ -25,7 +22,8 @@ public abstract class Item {
         this.keyword = "";
         this.task = "";
         this.status = "not done";
-        this.onList = new TodoList();
+//        this.onList = new TodoList();
+        emptyList = new TodoList();
     }
 
     // MODIFIES: this
@@ -81,9 +79,9 @@ public abstract class Item {
         return dueDate;
     }
 
-    public TodoList getList() {
-        return onList;
-    }
+//    public TodoList getList() {
+//        return onList;
+//    }
 
     // REQUIRES: the entry is in the todo list
     // EFFECTS: returns the number and item of the entry
@@ -97,26 +95,26 @@ public abstract class Item {
         return task + " due:" + dueDate + " " + status;
     }
 
-    public void addList(TodoList t) {
-        if (!(onList == t)) {
-            onList = t;
-            t.addExamPrep(this);
-        }
-    }
+//    public void addList(TodoList t) {
+//        if (!(onList == t)) {
+//            onList = t;
+//            t.addExamPrep(this);
+//        }
+//    }
 
-    public void removeList(TodoList t) {
-        if (onList == t) {
-            onList = new TodoList();
-            t.removeExamPrep(this);
-        }
-    }
+//    public void removeList(TodoList t) {
+//        if (onList == t) {
+//            onList = emptyList;
+//            t.removeExamPrep(this);
+//        }
+//    }
 
-    public String returnNumberOfItemsLeft() {
-        String print = "";
-        print = print + "by crossing off this item, you have " + (TodoList.examPrep.size() - 1)
-                + " items in the exam prep list";
-        return print;
-    }
+//    public String returnNumberOfItemsLeft() {
+//        String print = "";
+//        print = print + "by crossing off this item, you have " + (TodoList.examPrep.size() - 1)
+//                + " items in the exam prep list";
+//        return print;
+//    }
 
 
     public static String saveTodo(Item i) {
@@ -138,20 +136,39 @@ public abstract class Item {
         return print;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
+    public String printItemHelper(String print, String addOn) {
+        if (print.equals("")) {
+            print = print + todoGetItem() + addOn;
+        } else {
+            print = print + "\n" + todoGetItem() + addOn;
         }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Item item = (Item) o;
-        return Objects.equals(task, item.task) && Objects.equals(dueDate, item.dueDate);
+        return print;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(task, dueDate);
+    public Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
+        item.setKeyword(partsOfLine.get(0));
+        item.setNumber(Integer.parseInt(partsOfLine.get(1)));
+        item.setTask(partsOfLine.get(2));
+        item.setDue(Integer.parseInt(partsOfLine.get(3)), Integer.parseInt(partsOfLine.get(4)),
+                Integer.parseInt(partsOfLine.get(5)));
+        item.setStatus(partsOfLine.get(6));
+        return item;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        Item item = (Item) o;
+//        return Objects.equals(task, item.task) && Objects.equals(dueDate, item.dueDate);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(task, dueDate);
+//    }
 }

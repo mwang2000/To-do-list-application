@@ -1,6 +1,5 @@
 package tests;
 
-import exceptions.OverDueException;
 import model.UrgentItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,12 +28,12 @@ public class TestRegularItem {
     @Test
     public void testPrintRegularItemEmpty() {
         String print = "";
-        assertEquals("1. abc due:2020-01-01 not done Keyword: a",RegularItem.printRegularItem(print,entry));
+        assertEquals("1. abc due:2020-01-01 not done Keyword: a",entry.printRegularItem(print));
     }
 
     @Test
     public void testPrintRegularItem() {
         String print = "hello";
-        assertEquals("hello\n1. abc due:2020-01-01 not done Keyword: a",RegularItem.printRegularItem(print,entry));
+        assertEquals("hello\n1. abc due:2020-01-01 not done Keyword: a",entry.printRegularItem(print));
     }
 }

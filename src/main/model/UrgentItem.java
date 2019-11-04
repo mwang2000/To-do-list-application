@@ -2,10 +2,8 @@ package model;
 
 import exceptions.OverDueException;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 
 public class UrgentItem extends Item {
     public UrgentItem() {
@@ -22,22 +20,30 @@ public class UrgentItem extends Item {
     }
 
     // EFFECTS: returns an urgent item to be printed
-    public static String printUrgentItem(String print, Item e) throws OverDueException {
-        if (print.equals("")) {
-            print = print + e.todoGetItem() + "\n" + ((UrgentItem) e).timeLeft();
-        } else {
-            print = print + "\n" + e.todoGetItem() + "\n" + ((UrgentItem) e).timeLeft();
-        }
-        return print;
+//    public String printUrgentItem(String print) throws OverDueException {
+//        if (print.equals("")) {
+//            print = print + todoGetItem() + timeLeft();
+//        } else {
+//            print = print + "\n" + todoGetItem() + timeLeft();
+//        }
+//        return print;
+//    }
+
+    public String printUrgentItem(String print) throws OverDueException {
+        return printItemHelper(print,timeLeft());
     }
 
     //EFFECTS: returns a string to be printed for an overdue item
-    public static String printOverdue(String print, Item e) {
-        if (print.equals("")) {
-            print = print + e.todoGetItem() + "\nThis item is overdue!";
-        } else {
-            print = print + "\n" + e.todoGetItem() + "\nThis item is overdue!";
-        }
-        return print;
+//    public String printOverdue(String print) {
+//        if (print.equals("")) {
+//            print = print + todoGetItem() + "\nThis item is overdue!";
+//        } else {
+//            print = print + "\n" + todoGetItem() + "\nThis item is overdue!";
+//        }
+//        return print;
+//    }
+
+    public String printOverdue(String print) {
+        return printItemHelper(print,"\nThis item is overdue!");
     }
 }

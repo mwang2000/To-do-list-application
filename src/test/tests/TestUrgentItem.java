@@ -53,21 +53,21 @@ public class TestUrgentItem {
     public void testPrintOverdueEmpty() {
         String print = "";
         assertEquals("0. abc due:2019-01-01 not done Keyword: a\nThis item is overdue!",
-                UrgentItem.printOverdue(print,entry));
+                entry.printOverdue(print));
     }
 
     @Test
     public void testPrintOverdueNotEmpty() {
         String print = "hello";
         assertEquals("hello\n0. abc due:2019-01-01 not done Keyword: a\nThis item is overdue!",
-                UrgentItem.printOverdue(print,entry));
+                entry.printOverdue(print));
     }
 
     @Test
     public void testPrintUrgentItemEmpty() throws OverDueException {
         String print = "";
         assertEquals("0. def due:2020-01-01 not done Keyword: b\nThere are 66 days until this task is due.",
-                UrgentItem.printUrgentItem(print,entry2));
+                entry2.printUrgentItem(print));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TestUrgentItem {
         String print = "hello";
         assertEquals("hello\n0. def due:2020-01-01 not done Keyword: b\n"
                 + "There are 66 days until this task is due.",
-                UrgentItem.printUrgentItem(print,entry2));
+                entry2.printUrgentItem(print));
     }
 
 }

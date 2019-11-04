@@ -9,61 +9,63 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import static ui.Main.todoMap;
 
 public class TodoList implements Saveable,Loadable {
-    public static int MAX_TODO_SIZE = 3;
-    public static ArrayList<Item> todo;
-    public static ArrayList<Item> crossedOff;
-    public static ArrayList<Item> examPrep;
+    public ArrayList<Item> list;
 
     public TodoList() {
-        todo = new ArrayList<>();
-        crossedOff = new ArrayList<>();
-        examPrep = new ArrayList<>();
+        list = new ArrayList<>();
     }
 
-    public static void updateTodo(Map<String,Item> map) {
-        todo = new ArrayList<>(map.values());
+    public void updateTodo(Map<String,Item> map) {
+        list = new ArrayList<>(map.values());
     }
 
-    public static void addTodo(Item i) {
-        todo.add(i);
+    public void addItem(Item i) {
+        list.add(i);
     }
 
-    public void addExamPrep(Item i) {
-        if (!examPrep.contains(i)) {
-            if (i instanceof UrgentItem) {
-                Item e = new UrgentItem();
-                e.setTask(i.getTask());
-                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
-                examPrep.add(e);
-            } else {
-                Item e = new RegularItem();
-                e.setTask(i.getTask());
-                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
-                examPrep.add(e);
-            }
-            i.addList(this);
-        }
+    public boolean listContains(Item i) {
+        return list.contains(i);
     }
+
+    public int listSize() {
+        return list.size();
+    }
+
+//    public void addExamPrep(Item i) {
+//        if (!list.contains(i)) {
+//            if (i instanceof UrgentItem) {
+//                Item e = new UrgentItem();
+//                e.setTask(i.getTask());
+//                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
+//                list.add(e);
+//            } else {
+//                Item e = new RegularItem();
+//                e.setTask(i.getTask());
+//                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
+//                list.add(e);
+//            }
+//            i.addList(this);
+//        }
+//    }
 
 
     // EFFECTS: prints the todo list and then the crossed out list
-    public static String returnTodoList() {
-        if (todo.size() == 0) {
+    public String returnTodoList() {
+        if (list.size() == 0) {
             return "Nothing in the to do list.";
         } else {
             String print = "";
-            for (Item e : todo) {
+            for (Item e : list) {
                 if (e instanceof UrgentItem) {
                     try {
-                        print = UrgentItem.printUrgentItem(print, e);
+                        print = ((UrgentItem) e).printUrgentItem(print);
                     } catch (OverDueException od) {
-                        print = UrgentItem.printOverdue(print,e);
+                        print = ((UrgentItem) e).printOverdue(print);
                     }
                 } else {
-                    print = RegularItem.printRegularItem(print, e);
+                    print = ((RegularItem) e).printRegularItem(print);
                 }
             }
             return print;
@@ -72,50 +74,50 @@ public class TodoList implements Saveable,Loadable {
 
 
     //EFFECTS: returns the crossed off list as a string to be printed
-    public static String returnCrossedOffList() {
-        if (crossedOff.size() == 0) {
+    public String returnCrossedOffList() {
+        if (list.size() == 0) {
             return "\nNothing in the crossed off list.";
         } else {
             String print = "";
-            for (Item e : crossedOff) {
+            for (Item e : list) {
                 print = print + "\n" + e.crossedOffGetItem();
             }
-            return "\nThe crossed off list is\n" + print;
+            return "\nThe crossed off list is" + print;
         }
     }
 
-    public static String returnExamPrep() {
-        if (examPrep.size() == 0) {
-            return "\nNothing in the exam prep list.";
-        } else {
-            String print = "";
-            for (Item e : examPrep) {
-                print = print + "\n" + e.task + " " + e.dueDate;
-            }
-            return "The exam prep list is:\n" + print;
-        }
-    }
+//    public String returnExamPrep() {
+//        if (list.size() == 0) {
+//            return "\nNothing in the exam prep list.";
+//        } else {
+//            String print = "";
+//            for (Item e : list) {
+//                print = print + "\n" + e.task + " " + e.dueDate;
+//            }
+//            return "\nThe exam prep list is:" + print;
+//        }
+//    }
 
     //MODIFIES: todoMap,todo,crossedOff
     //EFFECTS: moves an item from todoMap and examPrep ,if applicable, to crossedOff and changes the status to "done"
-    public void moveItem(String removing, Map<String, Item> map,TodoList crossedOff) {
+    public void moveItem(String removing, Map<String, Item> map, TodoList todo) {
         Item removedItem = map.get(removing);
-        if (examPrep.contains(removedItem)) {
-            removeExamPrep(removedItem);
-        }
-        TodoList.crossedOff.add(removedItem);
+//        if (list.contains(removedItem)) {
+//            removeExamPrep(removedItem);
+//        }
         removedItem.setStatus("done");
         removedItem.setNumber(0);
+        list.add(removedItem);
         map.remove(removing);
-        updateTodo(map);
+        todo.updateTodo(map);
     }
 
-    public void removeExamPrep(Item i) {
-        if (examPrep.contains(i)) {
-            examPrep.remove(i);
-            i.removeList(this);
-        }
-    }
+//    public void removeExamPrep(Item i) {
+//        if (list.contains(i)) {
+//            list.remove(i);
+//            i.removeList(this);
+//        }
+//    }
 
     public void save(Map<String,Item> map) throws FileNotFoundException {
         File file = new File(String.valueOf(Paths.get("./data/file")));
@@ -123,64 +125,67 @@ public class TodoList implements Saveable,Loadable {
         for (Map.Entry<String,Item> i : map.entrySet()) {
             printWriter.println(i.getKey() + "_" + Item.saveTodo(i.getValue()));
         }
-        if (!examPrep.isEmpty()) {
+        if (!list.isEmpty()) {
             printWriter.println(saveExamPrep());
             printWriter.close();
         }
     }
 
-    public static String saveExamPrep() {
+    public String saveExamPrep() {
         String print = "";
-        for (Item i : examPrep) {
-            print = print + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
-                    + i.getDue().getDayOfMonth();
+        for (Item i : list) {
+            if (print == "") {
+                print = print + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
+                        + i.getDue().getDayOfMonth();
+            } else {
+                print = print + "\n" + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
+                        + i.getDue().getDayOfMonth();
+            }
         }
         return print;
     }
 
 
     //EFFECTS: loads todo list from file
-    public static void loadTodo(TodoList tl) throws IOException {
+    public void loadTodo() throws IOException {
         Map<String,Item> map = new HashMap<>();
-        todoMap = tl.load(map);
-        todo = new ArrayList<>(todoMap.values());
+        list = new ArrayList<>(load(map).values());
     }
 
     public Map<String,Item> load(Map<String,Item> map) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("./data/file"));
         for (String line : lines) {
-            ArrayList<String> partsOfLine = splitOnBar(line);
+            ArrayList<String> partsOfLine = splitOnUnderscore(line);
             if (partsOfLine.size() == 8) {
                 Item item = new UrgentItem();
-                map.put(partsOfLine.get(0),retrieveItemFields(partsOfLine,item));
+                map.put(partsOfLine.get(0),item.retrieveItemFields(partsOfLine,item));
             } else if (partsOfLine.size() == 7) {
                 Item item = new RegularItem();
-                map.put(partsOfLine.get(0),retrieveItemFields(partsOfLine,item));
+                map.put(partsOfLine.get(0),item.retrieveItemFields(partsOfLine,item));
             } else {
                 Item item = new UrgentItem();
                 item.setTask(partsOfLine.get(0));
                 item.setDue(Integer.parseInt(partsOfLine.get(1)),Integer.parseInt(partsOfLine.get(2)),
                         Integer.parseInt(partsOfLine.get(3)));
-                examPrep.add(item);
+                list.add(item);
             }
         }
         return map;
     }
 
-    public static Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
-        item.setKeyword(partsOfLine.get(0));
-        item.setNumber(Integer.parseInt(partsOfLine.get(1)));
-        item.setTask(partsOfLine.get(2));
-        item.setDue(Integer.parseInt(partsOfLine.get(3)), Integer.parseInt(partsOfLine.get(4)),
-                Integer.parseInt(partsOfLine.get(5)));
-        item.setStatus(partsOfLine.get(6));
-        return item;
-    }
+//    public Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
+//        item.setKeyword(partsOfLine.get(0));
+//        item.setNumber(Integer.parseInt(partsOfLine.get(1)));
+//        item.setTask(partsOfLine.get(2));
+//        item.setDue(Integer.parseInt(partsOfLine.get(3)), Integer.parseInt(partsOfLine.get(4)),
+//                Integer.parseInt(partsOfLine.get(5)));
+//        item.setStatus(partsOfLine.get(6));
+//        return item;
+//    }
 
-    public static ArrayList<String> splitOnBar(String line) {
+    public ArrayList<String> splitOnUnderscore(String line) {
         String[] splits = line.split("_");
         return new ArrayList<>(Arrays.asList(splits));
     }
-
 }
 
