@@ -12,7 +12,6 @@ public abstract class Item {
     protected LocalDate dueDate;
     protected String status;
 //    protected TodoList onList;
-    public static TodoList emptyList;
 
 
     // MODIFIES: this
@@ -23,7 +22,6 @@ public abstract class Item {
         this.task = "";
         this.status = "not done";
 //        this.onList = new TodoList();
-        emptyList = new TodoList();
     }
 
     // MODIFIES: this

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,8 +191,23 @@ public class TestTodoList {
 //    }
 
     @Test
-    void testSaveLoad() throws IOException {
+    void testLoadTodoUrgent() throws IOException {
         todoMap.put("b",entry3);
+        todo.save(todoMap);
+        todo.loadTodo();
+        assertTrue(todo.listContains(entry3));
+    }
+
+    @Test
+    void testSaveLoadUrgent() throws IOException {
+        todoMap.put("b",entry3);
+        todo.save(todoMap);
+        assertEquals(todoMap,todo.load(todoMap));
+    }
+
+    @Test
+    void testSaveLoadRegular() throws IOException {
+        todoMap.put("a",entry);
         todo.save(todoMap);
         assertEquals(todoMap,todo.load(todoMap));
     }

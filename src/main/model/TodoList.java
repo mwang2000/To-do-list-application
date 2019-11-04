@@ -125,25 +125,25 @@ public class TodoList implements Saveable,Loadable {
         for (Map.Entry<String,Item> i : map.entrySet()) {
             printWriter.println(i.getKey() + "_" + Item.saveTodo(i.getValue()));
         }
-        if (!list.isEmpty()) {
-            printWriter.println(saveExamPrep());
-            printWriter.close();
-        }
+//        if (!list.isEmpty()) {
+//            printWriter.println(saveExamPrep());
+//            printWriter.close();
+//        }
     }
 
-    public String saveExamPrep() {
-        String print = "";
-        for (Item i : list) {
-            if (print == "") {
-                print = print + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
-                        + i.getDue().getDayOfMonth();
-            } else {
-                print = print + "\n" + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
-                        + i.getDue().getDayOfMonth();
-            }
-        }
-        return print;
-    }
+//    public String saveExamPrep() {
+//        String print = "";
+//        for (Item i : list) {
+//            if (print == "") {
+//                print = print + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue() + "_"
+//                        + i.getDue().getDayOfMonth();
+//            } else {
+//                print = print + "\n" + i.getTask() + "_" + i.getDue().getYear() + "_" + i.getDue().getMonthValue()
+//                + "_" + i.getDue().getDayOfMonth();
+//            }
+//        }
+//        return print;
+//    }
 
 
     //EFFECTS: loads todo list from file
@@ -162,13 +162,14 @@ public class TodoList implements Saveable,Loadable {
             } else if (partsOfLine.size() == 7) {
                 Item item = new RegularItem();
                 map.put(partsOfLine.get(0),item.retrieveItemFields(partsOfLine,item));
-            } else {
-                Item item = new UrgentItem();
-                item.setTask(partsOfLine.get(0));
-                item.setDue(Integer.parseInt(partsOfLine.get(1)),Integer.parseInt(partsOfLine.get(2)),
-                        Integer.parseInt(partsOfLine.get(3)));
-                list.add(item);
             }
+//            else {
+//                Item item = new UrgentItem();
+//                item.setTask(partsOfLine.get(0));
+//                item.setDue(Integer.parseInt(partsOfLine.get(1)),Integer.parseInt(partsOfLine.get(2)),
+//                        Integer.parseInt(partsOfLine.get(3)));
+//                list.add(item);
+//            }
         }
         return map;
     }
