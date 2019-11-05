@@ -125,6 +125,7 @@ public class TodoList implements Saveable,Loadable {
         for (Map.Entry<String,Item> i : map.entrySet()) {
             printWriter.println(i.getKey() + "_" + Item.saveTodo(i.getValue()));
         }
+        printWriter.close();
 //        if (!list.isEmpty()) {
 //            printWriter.println(saveExamPrep());
 //            printWriter.close();
@@ -147,10 +148,10 @@ public class TodoList implements Saveable,Loadable {
 
 
     //EFFECTS: loads todo list from file
-    public void loadTodo() throws IOException {
-        Map<String,Item> map = new HashMap<>();
-        list = new ArrayList<>(load(map).values());
-    }
+//    public void loadToList() throws IOException {
+//        Map<String,Item> map = new HashMap<>();
+//        list = new ArrayList<>(load(map).values());
+//    }
 
     public Map<String,Item> load(Map<String,Item> map) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("./data/file"));

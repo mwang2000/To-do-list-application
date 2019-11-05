@@ -3,10 +3,10 @@ package ui;
 import java.io.IOException;
 
 public class Main {
-    private static TodoListManager todoListManager;
+    private static TodoListRunner todoListRunner;
 
     public static void main(String[] args) throws IOException {
-        todoListManager = new TodoListManager();
-        todoListManager.run();
+        todoListRunner = new TodoListRunner();
+        todoListRunner.run();
     }
 }
