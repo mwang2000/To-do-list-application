@@ -4,6 +4,7 @@ import exceptions.OverDueException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Observer;
 
 public abstract class Item {
     protected int number;

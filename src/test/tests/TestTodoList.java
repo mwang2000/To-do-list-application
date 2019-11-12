@@ -1,11 +1,8 @@
 package tests;
 
-import model.Item;
-import model.TodoList;
-import model.UrgentItem;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import model.RegularItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +19,7 @@ public class TestTodoList {
     private RegularItem entry2;
     private UrgentItem entry3;
     private Map<String,Item> todoMap;
+    private User user;
 
     @BeforeEach
     public void runBefore() {
@@ -39,14 +37,22 @@ public class TestTodoList {
         todoMap = new HashMap<>();
         todoMap.put("a",entry);
         todo = new TodoList();
-        examPrep = new TodoList();
+        user = new User();
     }
 
     @Test
-    public void testUpdateTodo() {
+    public void testUpdateTodo() throws IOException {
         todo.updateTodo(todoMap);
         assertTrue(todo.listContains(entry));
         assertEquals(1,todo.listSize());
+    }
+
+    @Test
+    public void testAddUser() {
+        todo.addUser(user);
+        assertTrue(todo.users.contains(user));
+        assertTrue(todo.observers.contains(user));
+        assertEquals(todo,user.todo);
     }
 
 //    @Test
@@ -80,7 +86,7 @@ public class TestTodoList {
 //    }
 
     @Test
-    public void testMoveItemEmptyCrossedOff() {
+    public void testMoveItemEmptyCrossedOff() throws IOException {
         todoMap.put("a",entry);
         todoMap.put("b",entry2);
         todoMap.put("c",entry3);
@@ -94,7 +100,7 @@ public class TestTodoList {
     }
 
     @Test
-    public void testMoveItemNotEmptyCrossedOff() {
+    public void testMoveItemNotEmptyCrossedOff() throws IOException {
         todoMap.put("a",entry);
         todoMap.put("b",entry2);
         todo.updateTodo(todoMap);
@@ -108,7 +114,7 @@ public class TestTodoList {
     }
 
     @Test
-    public void testMoveItemUrgentItem() {
+    public void testMoveItemUrgentItem() throws IOException {
         todoMap.remove("a",entry);
         todoMap.put("c",entry3);
         todo.updateTodo(todoMap);
@@ -135,7 +141,7 @@ public class TestTodoList {
     }
 
     @Test
-    public void testReturnTodoRegular() {
+    public void testReturnTodoRegular() throws IOException {
         todoMap.put("a",entry);
         entry.setDue(2019,12,31);
         todo.updateTodo(todoMap);
@@ -143,7 +149,7 @@ public class TestTodoList {
     }
 
     @Test
-    public void testReturnTodoException() {
+    public void testReturnTodoException() throws IOException {
         todoMap.remove("a");
         todoMap.put("c",entry3);
         entry3.setDue(2019,10,10);

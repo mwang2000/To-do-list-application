@@ -3,6 +3,7 @@ package ui;
 import exceptions.TooManyThingsToDoException;
 import model.Item;
 import model.TodoList;
+import model.User;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,17 +16,19 @@ public class TodoListManager {
     public TodoList crossedOff;
     public Scanner scanner;
     public Map<String, Item> todoMap;
-    private int maxTodoSize = 3;
+    private User user;
 
     public TodoListManager() {
         todo = new TodoList();
         crossedOff = new TodoList();
         scanner = new Scanner(System.in);
         todoMap = new HashMap<>();
+        user = new User();
+        todo.addUser(user);
     }
 
     //EFFECTS: sets and adds an item if the list is not full, otherwise add to
-    public void tryAddItem(Item item) {
+    public void tryAddItem(Item item) throws IOException {
         try {
             setItem(item);
             todo.updateTodo(todoMap);
@@ -39,13 +42,13 @@ public class TodoListManager {
     // MODIFIES: this
     // EFFECTS: adds an entry into the todo list consisting of the item and its number
     public void setItem(Item item) throws TooManyThingsToDoException {
+        int maxTodoSize = 3;
         if (todoMap.size() == maxTodoSize) {
             throw new TooManyThingsToDoException();
         }
         item.setNumber(todoMap.size() + 1);
         System.out.println("Enter the unique keyword for the task.");
-        String key = scanner.nextLine();
-        item.setKeyword(key);
+        item.setKeyword(scanner.nextLine());
         System.out.println("Enter the task.");
         item.setTask(scanner.nextLine());
         System.out.println("Enter the due date (3 integers in the form of yyyy mm dd):");
@@ -53,12 +56,12 @@ public class TodoListManager {
         int m = scanner.nextInt();
         int d = scanner.nextInt();
         item.setDue(y, m, d);
-        todoMap.put(key,item);
+        todoMap.put(item.getKeyword(),item);
     }
 
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
-    public void move() {
+    public void move() throws IOException {
         System.out.println("Which item would you like to cross off (enter its keyword)?");
         String removing = scanner.nextLine();
 //        Item removedItem = todoMap.get(removing);
@@ -66,6 +69,7 @@ public class TodoListManager {
 //            System.out.println(removedItem.returnNumberOfItemsLeft());
 //        }
         crossedOff.moveItem(removing,todoMap,todo);
+        printLists();
     }
 
     // EFFECTS: prints both lists

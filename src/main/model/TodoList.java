@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.OverDueException;
+import observer.Subject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,15 +11,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class TodoList implements Saveable,Loadable {
-    public ArrayList<Item> list;
+public class TodoList extends Subject implements Saveable,Loadable {
+    private ArrayList<Item> list;
+    public List<User> users;
 
     public TodoList() {
         list = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
-    public void updateTodo(Map<String,Item> map) {
+    public void updateTodo(Map<String,Item> map) throws IOException {
         list = new ArrayList<>(map.values());
+        notifyObservers();
     }
 
     public void addItem(Item i) {
@@ -31,6 +35,14 @@ public class TodoList implements Saveable,Loadable {
 
     public int listSize() {
         return list.size();
+    }
+
+    public void addUser(User user) {
+        if (!users.contains(user)) {
+            users.add(user);
+            addObserver(user);
+            user.addTodo(this);
+        }
     }
 
 //    public void addExamPrep(Item i) {
@@ -100,7 +112,7 @@ public class TodoList implements Saveable,Loadable {
 
     //MODIFIES: todoMap,todo,crossedOff
     //EFFECTS: moves an item from todoMap and examPrep ,if applicable, to crossedOff and changes the status to "done"
-    public void moveItem(String removing, Map<String, Item> map, TodoList todo) {
+    public void moveItem(String removing, Map<String, Item> map, TodoList todo) throws IOException {
         Item removedItem = map.get(removing);
 //        if (list.contains(removedItem)) {
 //            removeExamPrep(removedItem);

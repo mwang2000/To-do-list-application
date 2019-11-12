@@ -10,9 +10,10 @@ public class TodoListRunner {
     private TodoListManager todoListManager;
     private Scanner scanner;
 
-    public TodoListRunner() {
+    public TodoListRunner() throws IOException {
         todoListManager = new TodoListManager();
         scanner = new Scanner(System.in);
+        run();
     }
 
     public void run() throws IOException {
@@ -35,13 +36,13 @@ public class TodoListRunner {
     }
 
     //EFFECTS: catches TooManyThingsToDoException for UrgentItems
-    public void addUrgentItem() {
+    public void addUrgentItem() throws IOException {
         UrgentItem item = new UrgentItem();
         todoListManager.tryAddItem(item);
     }
 
     //EFFECTS: catches TooManyThingsToDoException for RegularItems
-    public void addRegularItem() {
+    public void addRegularItem() throws IOException {
         RegularItem item = new RegularItem();
         todoListManager.tryAddItem(item);
     }
