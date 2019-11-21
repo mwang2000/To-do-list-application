@@ -16,7 +16,8 @@ public class RegularItem extends Item {
 //        return print;
 //    }
 
-    public String printRegularItem(String print) {
-        return printItemHelper(print,"");
+    // EFFECTS: returns given string with nothing added to the end
+    public String printRegularItem(int number) {
+        return printItemHelper(number,"");
     }
 }

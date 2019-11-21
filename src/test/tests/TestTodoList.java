@@ -92,7 +92,6 @@ public class TestTodoList {
         todoMap.put("c",entry3);
         todo.updateTodo(todoMap);
         crossedOff.moveItem("a",todoMap,todo);
-        entry.setNumber(0);
         assertEquals(2, todo.listSize());
         assertTrue(todo.listContains(entry2));
         assertEquals(1, crossedOff.listSize());
@@ -106,7 +105,6 @@ public class TestTodoList {
         todo.updateTodo(todoMap);
         crossedOff.addItem(entry3);
         crossedOff.moveItem("b",todoMap,todo);
-        entry2.setNumber(0);
         assertEquals(1, todo.listSize());
         assertTrue(todo.listContains(entry));
         assertEquals(2, crossedOff.listSize());
@@ -120,7 +118,6 @@ public class TestTodoList {
         todo.updateTodo(todoMap);
         crossedOff.addItem(entry);
         crossedOff.moveItem("c",todoMap,todo);
-        entry3.setNumber(0);
         assertEquals(0,todo.listSize());
         assertEquals(2,crossedOff.listSize());
         assertTrue(crossedOff.listContains(entry3));
@@ -244,7 +241,6 @@ public class TestTodoList {
         Item item = new RegularItem();
         item.retrieveItemFields(partsOfLine,item);
         assertEquals( entry.getKeyword(), item.getKeyword());
-        assertEquals( entry.getNumber(), item.getNumber());
         assertEquals( entry.getTask(), item.getTask());
         assertEquals( entry.getDue().getYear(), item.getDue().getYear());
         assertEquals( entry.getDue().getMonthValue(), item.getDue().getMonthValue());

@@ -20,23 +20,31 @@ public class TodoList extends Subject implements Saveable,Loadable {
         users = new ArrayList<>();
     }
 
+    // MODIFIES: this
+    // EFFECTS: replaces current list with a new arraylist of the values of the map and notifies observers
     public void updateTodo(Map<String,Item> map) throws IOException {
         list = new ArrayList<>(map.values());
         notifyObservers();
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds an item to list
     public void addItem(Item i) {
         list.add(i);
     }
 
+    // EFFECTS: returns true if list contains given item
     public boolean listContains(Item i) {
         return list.contains(i);
     }
 
+    // EFFECTS: returns size of list
     public int listSize() {
         return list.size();
     }
 
+    // MODIFIES: this, user
+    // EFFECTS: adds a user to users and adds this to the given user's todo list
     public void addUser(User user) {
         if (!users.contains(user)) {
             users.add(user);
@@ -66,18 +74,19 @@ public class TodoList extends Subject implements Saveable,Loadable {
     // EFFECTS: prints the todo list and then the crossed out list
     public String returnTodoList() {
         if (list.size() == 0) {
-            return "Nothing in the to do list.";
+            return "Nothing in the to do list.\n";
         } else {
-            String print = "";
+            String print = "The to do list is:\n";
             for (Item e : list) {
+                int number = (list.indexOf(e) + 1);
                 if (e instanceof UrgentItem) {
                     try {
-                        print = ((UrgentItem) e).printUrgentItem(print);
+                        print = print + ((UrgentItem) e).printUrgentItem(number) + "\n";
                     } catch (OverDueException od) {
-                        print = ((UrgentItem) e).printOverdue(print);
+                        print = print + ((UrgentItem) e).printOverdue(number) + "\n";
                     }
                 } else {
-                    print = ((RegularItem) e).printRegularItem(print);
+                    print = print + ((RegularItem) e).printRegularItem(number) + "\n";
                 }
             }
             return print;
@@ -88,13 +97,13 @@ public class TodoList extends Subject implements Saveable,Loadable {
     //EFFECTS: returns the crossed off list as a string to be printed
     public String returnCrossedOffList() {
         if (list.size() == 0) {
-            return "\nNothing in the crossed off list.";
+            return "Nothing in the crossed off list.";
         } else {
             String print = "";
             for (Item e : list) {
                 print = print + "\n" + e.crossedOffGetItem();
             }
-            return "\nThe crossed off list is" + print;
+            return "The crossed off list is" + print;
         }
     }
 
@@ -118,7 +127,6 @@ public class TodoList extends Subject implements Saveable,Loadable {
 //            removeExamPrep(removedItem);
 //        }
         removedItem.setStatus("done");
-        removedItem.setNumber(0);
         list.add(removedItem);
         map.remove(removing);
         todo.updateTodo(map);
@@ -131,6 +139,7 @@ public class TodoList extends Subject implements Saveable,Loadable {
 //        }
 //    }
 
+    // EFFECTS: saves items in to do list as strings
     public void save(Map<String,Item> map) throws FileNotFoundException {
         File file = new File(String.valueOf(Paths.get("./data/file")));
         PrintWriter printWriter = new PrintWriter(file);
@@ -165,14 +174,15 @@ public class TodoList extends Subject implements Saveable,Loadable {
 //        list = new ArrayList<>(load(map).values());
 //    }
 
+    // EFFECTS: converts strings in file into a hashmap of strings and items
     public Map<String,Item> load(Map<String,Item> map) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("./data/file"));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnUnderscore(line);
-            if (partsOfLine.size() == 8) {
+            if (partsOfLine.size() == 7) {
                 Item item = new UrgentItem();
                 map.put(partsOfLine.get(0),item.retrieveItemFields(partsOfLine,item));
-            } else if (partsOfLine.size() == 7) {
+            } else if (partsOfLine.size() == 6) {
                 Item item = new RegularItem();
                 map.put(partsOfLine.get(0),item.retrieveItemFields(partsOfLine,item));
             }
@@ -197,6 +207,7 @@ public class TodoList extends Subject implements Saveable,Loadable {
 //        return item;
 //    }
 
+    // EFFECTS: splits a line of string into an arraylist of string where the underscores lie
     public ArrayList<String> splitOnUnderscore(String line) {
         String[] splits = line.split("_");
         return new ArrayList<>(Arrays.asList(splits));

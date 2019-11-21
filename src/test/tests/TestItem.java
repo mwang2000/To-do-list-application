@@ -20,11 +20,9 @@ public class TestItem {
     public void runBefore() {
         entry = new RegularItem();
         entry.setTask("abc");
-        entry.setNumber(1);
         entry.setKeyword("a");
         entry.setDue(2019,12,31);
         entry2 = new UrgentItem();
-        entry2.setNumber(2);
         entry2.setKeyword("d");
         entry2.setDue(2020,1,1);
         entry2.setTask("def");
@@ -34,21 +32,10 @@ public class TestItem {
     @Test
     public void testConstructor() {
         Item i = new RegularItem();
-        assertEquals(0, i.getNumber());
         assertEquals("",i.getTask());
         assertEquals("",i.getKeyword());
         assertEquals("not done",i.getStatus());
 //        assertEquals(null,i.getList());
-    }
-
-    @Test
-    public void testSetNumber() {
-        testTodo.addItem(entry);
-        entry.setNumber(3);
-        testTodo.addItem(entry2);
-        entry2.setNumber(8);
-        assertEquals(3, entry.getNumber());
-        assertEquals(8, entry2.getNumber());
     }
 
     @Test
@@ -74,14 +61,6 @@ public class TestItem {
         testTodo.addItem(entry2);
         entry.setDue(2019,10,10);
         assertEquals(LocalDate.of(2019,10,10),entry.getDue());
-    }
-
-    @Test
-    public void testGetNumber() {
-        testTodo.addItem(entry);
-        testTodo.addItem(entry2);
-        assertEquals(1, entry.getNumber());
-        assertEquals(2, entry2.getNumber());
     }
 
     @Test

@@ -31,11 +31,12 @@ public class TodoListManager {
     public void tryAddItem(Item item) throws IOException {
         try {
             setItem(item);
+            todoMap.put(item.getKeyword(),item);
             todo.updateTodo(todoMap);
         } catch (TooManyThingsToDoException t) {
             System.out.println("Too many tasks to do! Finish some tasks first.");
         } finally {
-            System.out.println("\nThe to-do list is:" + todo.returnTodoList());
+            System.out.println(todo.returnTodoList());
         }
     }
 
@@ -46,7 +47,6 @@ public class TodoListManager {
         if (todoMap.size() == maxTodoSize) {
             throw new TooManyThingsToDoException();
         }
-        item.setNumber(todoMap.size() + 1);
         System.out.println("Enter the unique keyword for the task.");
         item.setKeyword(scanner.nextLine());
         System.out.println("Enter the task.");
@@ -56,13 +56,13 @@ public class TodoListManager {
         int m = scanner.nextInt();
         int d = scanner.nextInt();
         item.setDue(y, m, d);
-        todoMap.put(item.getKeyword(),item);
     }
 
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
     public void move() throws IOException {
         System.out.println("Which item would you like to cross off (enter its keyword)?");
+        scanner.nextLine();
         String removing = scanner.nextLine();
 //        Item removedItem = todoMap.get(removing);
 //        if (removedItem.getList() == (Item.emptyList)) {

@@ -29,8 +29,8 @@ public class UrgentItem extends Item {
 //        return print;
 //    }
 
-    public String printUrgentItem(String print) throws OverDueException {
-        return printItemHelper(print,timeLeft());
+    public String printUrgentItem(int number) throws OverDueException {
+        return printItemHelper(number,timeLeft());
     }
 
     //EFFECTS: returns a string to be printed for an overdue item
@@ -43,7 +43,7 @@ public class UrgentItem extends Item {
 //        return print;
 //    }
 
-    public String printOverdue(String print) {
-        return printItemHelper(print,"\nThis item is overdue!");
+    public String printOverdue(int number) {
+        return printItemHelper(number,"\nThis item is overdue!");
     }
 }

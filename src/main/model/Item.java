@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Observer;
 
 public abstract class Item {
-    protected int number;
     protected String keyword;
     protected String task;
     protected LocalDate dueDate;
@@ -18,17 +17,10 @@ public abstract class Item {
     // MODIFIES: this
     // EFFECTS: creates an entry with number of 0 and takes a string as a parameter which becomes the item
     public Item() {
-        this.number = 0;
         this.keyword = "";
         this.task = "";
         this.status = "not done";
 //        this.onList = new TodoList();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets the number of the entry to an int number
-    public void setNumber(int number) {
-        this.number = number;
     }
 
     public void setKeyword(String keyword) {
@@ -52,11 +44,6 @@ public abstract class Item {
     // EFFECTS: sets the due date of the entry to the user input
     public void setDue(int y, int m, int d) {
         this.dueDate = LocalDate.of(y,m,d);
-    }
-
-    // EFFECTS: returns the number of the entry it is called on
-    public int getNumber() {
-        return number;
     }
 
     public String getKeyword() {
@@ -85,7 +72,7 @@ public abstract class Item {
     // REQUIRES: the entry is in the todo list
     // EFFECTS: returns the number and item of the entry
     public String todoGetItem() {
-        return number + ". " + task + " due:" + dueDate + " " + status + " Keyword: " + keyword;
+        return task + " due:" + dueDate + " " + status + " Keyword: " + keyword;
     }
 
     // REQUIRES: the entry is in the crossedOff list
@@ -115,42 +102,40 @@ public abstract class Item {
 //        return print;
 //    }
 
-
+    // EFFECTS: prints all the properties of an item
     public static String saveTodo(Item i) {
         String print = "";
         if (i instanceof UrgentItem) {
             try {
-                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                print = print + i.getTask() + "_" + i.getDue().getYear() + "_"
                         + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
                         + "_" + ((UrgentItem) i).timeLeft();
             } catch (OverDueException e) {
-                print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+                print = print + i.getTask() + "_" + i.getDue().getYear() + "_"
                         + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus()
                         + "_" + "This item is overdue!";
             }
         } else {
-            print = print + i.getNumber() + "_" + i.getTask() + "_" + i.getDue().getYear() + "_"
+            print = print + i.getTask() + "_" + i.getDue().getYear() + "_"
                     + i.getDue().getMonthValue() + "_" + i.getDue().getDayOfMonth() + "_" + i.getStatus();
         }
         return print;
     }
 
-    public String printItemHelper(String print, String addOn) {
-        if (print.equals("")) {
-            print = print + todoGetItem() + addOn;
-        } else {
-            print = print + "\n" + todoGetItem() + addOn;
-        }
+    // EFFECTS: prints a string combined with another string
+    public String printItemHelper(int number,String addOn) {
+        String print = number + "." + todoGetItem() + addOn;
         return print;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets fields of an item with elements of an arraylist
     public Item retrieveItemFields(ArrayList<String> partsOfLine, Item item) {
         item.setKeyword(partsOfLine.get(0));
-        item.setNumber(Integer.parseInt(partsOfLine.get(1)));
-        item.setTask(partsOfLine.get(2));
-        item.setDue(Integer.parseInt(partsOfLine.get(3)), Integer.parseInt(partsOfLine.get(4)),
-                Integer.parseInt(partsOfLine.get(5)));
-        item.setStatus(partsOfLine.get(6));
+        item.setTask(partsOfLine.get(1));
+        item.setDue(Integer.parseInt(partsOfLine.get(2)), Integer.parseInt(partsOfLine.get(3)),
+                Integer.parseInt(partsOfLine.get(4)));
+        item.setStatus(partsOfLine.get(5));
         return item;
     }
 

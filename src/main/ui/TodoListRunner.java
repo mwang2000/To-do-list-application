@@ -13,23 +13,24 @@ public class TodoListRunner {
     public TodoListRunner() throws IOException {
         todoListManager = new TodoListManager();
         scanner = new Scanner(System.in);
+        todoListManager.loadAtStart();
         run();
     }
 
     public void run() throws IOException {
-        todoListManager.loadAtStart();
-        while (true) {
-            int choice = welcome();
-            if (choice == 1) {
-                addRegularItem();
-            } else if (choice == 2) {
-                addUrgentItem();
-            } else if (choice == 3) {
-                todoListManager.move();
-            } else if (choice == 4) {
-                todoListManager.printLists();
-            } else {
-                todoListManager.saveAtEnd();
+        int choice = 1;
+        while (choice >= 1 && choice <= 4) {
+            choice = welcome();
+            switch (choice) {
+                case 1: addRegularItem();
+                break;
+                case 2: addUrgentItem();
+                break;
+                case 3: todoListManager.move();
+                break;
+                case 4: todoListManager.printLists();
+                break;
+                default: todoListManager.saveAtEnd();
                 break;
             }
         }

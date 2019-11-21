@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subject {
+public abstract class Subject {
     public List<Observer> observers = new ArrayList<>();
 
     public void addObserver(Observer o) {
