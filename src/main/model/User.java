@@ -17,7 +17,7 @@ public class User implements Observer {
     }
 
     @Override
-    public void update() throws IOException {
+    public void update() {
         Network.printWebPage();
     }
 

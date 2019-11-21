@@ -22,9 +22,13 @@ public class TodoList extends Subject implements Saveable,Loadable {
 
     // MODIFIES: this
     // EFFECTS: replaces current list with a new arraylist of the values of the map and notifies observers
-    public void updateTodo(Map<String,Item> map) throws IOException {
+    public void updateTodo(Map<String,Item> map) {
         list = new ArrayList<>(map.values());
-        notifyObservers();
+        try {
+            notifyObservers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // MODIFIES: this
@@ -121,7 +125,7 @@ public class TodoList extends Subject implements Saveable,Loadable {
 
     //MODIFIES: todoMap,todo,crossedOff
     //EFFECTS: moves an item from todoMap and examPrep ,if applicable, to crossedOff and changes the status to "done"
-    public void moveItem(String removing, Map<String, Item> map, TodoList todo) throws IOException {
+    public void moveItem(String removing, Map<String, Item> map, TodoList todo) {
         Item removedItem = map.get(removing);
 //        if (list.contains(removedItem)) {
 //            removeExamPrep(removedItem);

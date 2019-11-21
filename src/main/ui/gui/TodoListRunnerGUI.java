@@ -1,11 +1,26 @@
 package ui.gui;
 
+import ui.TodoListManager;
+import ui.TodoListRunner;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
-public class TodoListRunnerGUI {
+public class TodoListRunnerGUI implements ActionListener {
+    TodoListRunner todoListRunner = new TodoListRunner();
+    TodoListManager todoListManager = new TodoListManager();
+    JButton choice1;
+    JButton choice2;
+    JButton choice3;
+    JButton choice4;
+    JButton choice5;
 
-    public TodoListRunnerGUI() {
+    public TodoListRunnerGUI() throws IOException {
+        todoListManager.loadAtStart();
+
         JFrame frame = new JFrame("ToDoList");
         Font titleFont = new Font("Arial", Font.PLAIN, 30);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,46 +47,66 @@ public class TodoListRunnerGUI {
         question.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 //        JPanel selectionPanel = new JPanel();
-        JButton choice1 = new JButton("Add a regular to-do list item");
+        choice1 = new JButton("Add a regular to-do list item");
         c.weighty = 3;
         c.weightx = 1;
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 2;
         frame.add(choice1,c);
+        choice1.addActionListener(this);
 
-        JButton choice2 = new JButton("Add an urgent to-do list item");
+        choice2 = new JButton("Add an urgent to-do list item");
         c.gridheight = 3;
         c.weightx = 1;
         c.gridwidth = 1;
         c.gridx = 1;
         c.gridy = 2;
         frame.add(choice2,c);
+        choice2.addActionListener(this);
 
-        JButton choice3 = new JButton("Cross off a finished item");
+        choice3 = new JButton("Cross off a finished item");
         c.weighty = 3;
         c.weightx = 1;
         c.gridwidth = 1;
         c.gridx = 2;
         c.gridy = 2;
         frame.add(choice3,c);
+        choice3.addActionListener(this);
 
-        JButton choice4 = new JButton("Show all to-do list items");
+        choice4 = new JButton("Show all to-do list items");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 3;
         frame.add(choice4,c);
+        choice4.addActionListener(this);
 
-        JButton choice5 = new JButton("Save and exit");
+        choice5 = new JButton("Save and exit");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
         c.gridwidth = 1;
         c.gridx = 1;
         c.gridy = 3;
         frame.add(choice5,c);
+        choice5.addActionListener(this);
 
         frame.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == choice1) {
+            todoListRunner.addRegularItem();
+        } else if (e.getSource() == choice2) {
+            todoListRunner.addUrgentItem();
+        } else if (e.getSource() == choice3) {
+            todoListManager.move();
+        } else if (e.getSource() == choice4) {
+            todoListManager.printLists();
+        } else {
+            todoListManager.saveAtEnd();
+        }
     }
 }

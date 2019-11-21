@@ -28,7 +28,7 @@ public class TodoListManager {
     }
 
     //EFFECTS: sets and adds an item if the list is not full, otherwise add to
-    public void tryAddItem(Item item) throws IOException {
+    public void tryAddItem(Item item) {
         try {
             setItem(item);
             todoMap.put(item.getKeyword(),item);
@@ -60,7 +60,7 @@ public class TodoListManager {
 
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
-    public void move() throws IOException {
+    public void move() {
         System.out.println("Which item would you like to cross off (enter its keyword)?");
         scanner.nextLine();
         String removing = scanner.nextLine();
@@ -83,8 +83,12 @@ public class TodoListManager {
         todo.updateTodo(todoMap);
     }
 
-    public void saveAtEnd() throws FileNotFoundException {
-        todo.save(todoMap);
+    public void saveAtEnd() {
+        try {
+            todo.save(todoMap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

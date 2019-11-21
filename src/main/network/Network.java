@@ -11,7 +11,7 @@ import java.net.URL;
 
 // from deliverable 10 instructions
 public class Network {
-    public static void printWebPage() throws IOException {
+    public static void printWebPage() {
         BufferedReader br = null;
         try {
             URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=Vancouver,ca&APPID="
@@ -27,7 +27,11 @@ public class Network {
             e.printStackTrace();
         } finally {
             if (br != null) {
-                br.close();
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
