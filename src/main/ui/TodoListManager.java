@@ -27,36 +27,40 @@ public class TodoListManager {
         todo.addUser(user);
     }
 
-    //EFFECTS: sets and adds an item if the list is not full, otherwise add to
-    public void tryAddItem(Item item) {
-        try {
-            setItem(item);
-            todoMap.put(item.getKeyword(),item);
-            todo.updateTodo(todoMap);
-        } catch (TooManyThingsToDoException t) {
-            System.out.println("Too many tasks to do! Finish some tasks first.");
-        } finally {
-            System.out.println(todo.returnTodoList());
-        }
+    public void addItem(Item item) {
+        todo.addItem(item);
     }
+
+    //EFFECTS: sets and adds an item if the list is not full, otherwise add to
+//    public void tryAddItem(Item item) {
+//        try {
+//            setItem(item);
+//            todoMap.put(item.getKeyword(),item);
+//            todo.updateTodo(todoMap);
+//        } catch (TooManyThingsToDoException t) {
+//            System.out.println("Too many tasks to do! Finish some tasks first.");
+//        } finally {
+//            System.out.println(todo.returnTodoList());
+//        }
+//    }
 
     // MODIFIES: this
     // EFFECTS: adds an entry into the todo list consisting of the item and its number
-    public void setItem(Item item) throws TooManyThingsToDoException {
-        int maxTodoSize = 3;
-        if (todoMap.size() == maxTodoSize) {
-            throw new TooManyThingsToDoException();
-        }
-        System.out.println("Enter the unique keyword for the task.");
-        item.setKeyword(scanner.nextLine());
-        System.out.println("Enter the task.");
-        item.setTask(scanner.nextLine());
-        System.out.println("Enter the due date (3 integers in the form of yyyy mm dd):");
-        int y = scanner.nextInt();
-        int m = scanner.nextInt();
-        int d = scanner.nextInt();
-        item.setDue(y, m, d);
-    }
+//    public void setItem(Item item) throws TooManyThingsToDoException {
+//        int maxTodoSize = 3;
+//        if (todoMap.size() == maxTodoSize) {
+//            throw new TooManyThingsToDoException();
+//        }
+//        System.out.println("Enter the unique keyword for the task.");
+//        item.setKeyword(scanner.nextLine());
+//        System.out.println("Enter the task.");
+//        item.setTask(scanner.nextLine());
+//        System.out.println("Enter the due date (3 integers in the form of yyyy mm dd):");
+//        int y = scanner.nextInt();
+//        int m = scanner.nextInt();
+//        int d = scanner.nextInt();
+//        item.setDue(y, m, d);
+//    }
 
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
@@ -64,10 +68,6 @@ public class TodoListManager {
         System.out.println("Which item would you like to cross off (enter its keyword)?");
         scanner.nextLine();
         String removing = scanner.nextLine();
-//        Item removedItem = todoMap.get(removing);
-//        if (removedItem.getList() == (Item.emptyList)) {
-//            System.out.println(removedItem.returnNumberOfItemsLeft());
-//        }
         crossedOff.moveItem(removing,todoMap,todo);
         printLists();
     }

@@ -6,6 +6,10 @@ public class RegularItem extends Item {
         super();
     }
 
+    public RegularItem(String keyword, String task, int y, int m, int d) {
+        super(keyword,task,y,m,d);
+    }
+
     // EFFECTS: returns a regular item to be printed
 //    public String printRegularItem(String print) {
 //        if (print.equals("")) {

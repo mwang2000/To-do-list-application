@@ -23,6 +23,13 @@ public abstract class Item {
 //        this.onList = new TodoList();
     }
 
+    public Item(String keyword, String task, int y, int m, int d) {
+        this.keyword = keyword;
+        this.task = task;
+        this.dueDate = LocalDate.of(y,m,d);
+        this.status = "not done";
+    }
+
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }

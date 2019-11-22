@@ -7,9 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-public class TodoListRunnerGUI implements ActionListener {
+public class TodoListRunnerGUI extends JFrame implements ActionListener {
     TodoListRunner todoListRunner = new TodoListRunner();
     TodoListManager todoListManager = new TodoListManager();
     JButton choice1;
@@ -19,13 +21,11 @@ public class TodoListRunnerGUI implements ActionListener {
     JButton choice5;
 
     public TodoListRunnerGUI() throws IOException {
-        todoListManager.loadAtStart();
-
-        JFrame frame = new JFrame("ToDoList");
+        super("ToDoList");
         Font titleFont = new Font("Arial", Font.PLAIN, 30);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 1000);
-        frame.setLayout(new GridBagLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 1000);
+        setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
         JPanel textPanel = new JPanel();
@@ -41,7 +41,7 @@ public class TodoListRunnerGUI implements ActionListener {
         c.weighty = 3;
         c.gridwidth = 3;
         c.fill = GridBagConstraints.HORIZONTAL;
-        frame.add(textPanel,c);
+        add(textPanel,c);
         welcomeMessage.setFont(titleFont);
         question.setFont(new Font("Arial",Font.PLAIN,20));
         question.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -53,7 +53,7 @@ public class TodoListRunnerGUI implements ActionListener {
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 2;
-        frame.add(choice1,c);
+        add(choice1,c);
         choice1.addActionListener(this);
 
         choice2 = new JButton("Add an urgent to-do list item");
@@ -62,7 +62,7 @@ public class TodoListRunnerGUI implements ActionListener {
         c.gridwidth = 1;
         c.gridx = 1;
         c.gridy = 2;
-        frame.add(choice2,c);
+        add(choice2,c);
         choice2.addActionListener(this);
 
         choice3 = new JButton("Cross off a finished item");
@@ -71,7 +71,7 @@ public class TodoListRunnerGUI implements ActionListener {
         c.gridwidth = 1;
         c.gridx = 2;
         c.gridy = 2;
-        frame.add(choice3,c);
+        add(choice3,c);
         choice3.addActionListener(this);
 
         choice4 = new JButton("Show all to-do list items");
@@ -80,7 +80,7 @@ public class TodoListRunnerGUI implements ActionListener {
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 3;
-        frame.add(choice4,c);
+        add(choice4,c);
         choice4.addActionListener(this);
 
         choice5 = new JButton("Save and exit");
@@ -89,10 +89,12 @@ public class TodoListRunnerGUI implements ActionListener {
         c.gridwidth = 1;
         c.gridx = 1;
         c.gridy = 3;
-        frame.add(choice5,c);
+        add(choice5,c);
         choice5.addActionListener(this);
 
-        frame.setVisible(true);
+//        addMouseListener(new MouseHandler);
+
+        setVisible(true);
     }
 
     @Override
@@ -108,5 +110,13 @@ public class TodoListRunnerGUI implements ActionListener {
         } else {
             todoListManager.saveAtEnd();
         }
+        setVisible(true);
     }
+
+//    private class MouseHandler extends MouseAdapter {
+//        @Override
+//        public void mouseClicked(MouseEvent e) {
+//            mouseClicked(e);
+//        }
+//    }
 }

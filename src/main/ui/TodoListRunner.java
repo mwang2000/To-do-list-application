@@ -1,7 +1,9 @@
 package ui;
 
+import model.Item;
 import model.RegularItem;
 import model.UrgentItem;
+import ui.gui.AddRegularItemGUI;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,35 +19,34 @@ public class TodoListRunner {
 //        run();
     }
 
-    public void run() throws IOException {
-        int choice = 1;
-        while (choice >= 1 && choice <= 4) {
-            choice = welcome();
-            switch (choice) {
-                case 1: addRegularItem();
-                break;
-                case 2: addUrgentItem();
-                break;
-                case 3: todoListManager.move();
-                break;
-                case 4: todoListManager.printLists();
-                break;
-                default: todoListManager.saveAtEnd();
-                break;
-            }
-        }
-    }
+//    public void run() throws IOException {
+//        int choice = 1;
+//        while (choice >= 1 && choice <= 4) {
+//            choice = welcome();
+//            switch (choice) {
+//                case 1: addRegularItem();
+//                break;
+//                case 2: addUrgentItem();
+//                break;
+//                case 3: todoListManager.move();
+//                break;
+//                case 4: todoListManager.printLists();
+//                break;
+//                default: todoListManager.saveAtEnd();
+//                break;
+//            }
 
     //EFFECTS: catches TooManyThingsToDoException for UrgentItems
     public void addUrgentItem() {
         UrgentItem item = new UrgentItem();
-        todoListManager.tryAddItem(item);
+//        todoListManager.tryAddItem(item);
     }
 
     //EFFECTS: catches TooManyThingsToDoException for RegularItems
-    public void addRegularItem() {
-        RegularItem item = new RegularItem();
-        todoListManager.tryAddItem(item);
+    public void addRegularItem(String keyword, String task, int y, int m, int d) {
+        new AddRegularItemGUI();
+        RegularItem item = new RegularItem(keyword,task,y,m,d);
+        todoListManager.addItem(item);
     }
 
     //MODIFIES: this
