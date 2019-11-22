@@ -10,6 +10,10 @@ public class UrgentItem extends Item {
         super();
     }
 
+    public UrgentItem(String keyword, String task, int y, int m, int d) {
+        super(keyword, task, y, m, d);
+    }
+
     //EFFECTS: returns a string that states the number of days until due date
     public String timeLeft() throws OverDueException {
         long difference = ChronoUnit.DAYS.between(LocalDate.now(),dueDate);

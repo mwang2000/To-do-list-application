@@ -1,18 +1,14 @@
 package ui.gui;
 
 import ui.TodoListManager;
-import ui.TodoListRunner;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-public class TodoListRunnerGUI extends JFrame implements ActionListener {
-    TodoListRunner todoListRunner = new TodoListRunner();
+public class MainGUI extends JFrame implements ActionListener {
     TodoListManager todoListManager = new TodoListManager();
     JButton choice1;
     JButton choice2;
@@ -20,7 +16,7 @@ public class TodoListRunnerGUI extends JFrame implements ActionListener {
     JButton choice4;
     JButton choice5;
 
-    public TodoListRunnerGUI() throws IOException {
+    public MainGUI() throws IOException {
         super("ToDoList");
         Font titleFont = new Font("Arial", Font.PLAIN, 30);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,7 +42,6 @@ public class TodoListRunnerGUI extends JFrame implements ActionListener {
         question.setFont(new Font("Arial",Font.PLAIN,20));
         question.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-//        JPanel selectionPanel = new JPanel();
         choice1 = new JButton("Add a regular to-do list item");
         c.weighty = 3;
         c.weightx = 1;
@@ -92,31 +87,22 @@ public class TodoListRunnerGUI extends JFrame implements ActionListener {
         add(choice5,c);
         choice5.addActionListener(this);
 
-//        addMouseListener(new MouseHandler);
-
         setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == choice1) {
-            todoListRunner.addRegularItem();
+            todoListManager.addRegularItem();
         } else if (e.getSource() == choice2) {
-            todoListRunner.addUrgentItem();
+            todoListManager.addUrgentItem();
         } else if (e.getSource() == choice3) {
             todoListManager.move();
         } else if (e.getSource() == choice4) {
             todoListManager.printLists();
         } else {
             todoListManager.saveAtEnd();
+            this.dispose();
         }
-        setVisible(true);
     }
-
-//    private class MouseHandler extends MouseAdapter {
-//        @Override
-//        public void mouseClicked(MouseEvent e) {
-//            mouseClicked(e);
-//        }
-//    }
 }

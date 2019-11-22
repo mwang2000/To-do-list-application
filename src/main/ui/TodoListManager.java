@@ -4,6 +4,9 @@ import exceptions.TooManyThingsToDoException;
 import model.Item;
 import model.TodoList;
 import model.User;
+import ui.gui.AddRegularItemGUI;
+import ui.gui.AddUrgentItemGUI;
+import ui.gui.MoveItemGUI;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,21 +17,24 @@ import java.util.Scanner;
 public class TodoListManager {
     public TodoList todo;
     public TodoList crossedOff;
-    public Scanner scanner;
     public Map<String, Item> todoMap;
     private User user;
 
-    public TodoListManager() {
+    public TodoListManager() throws IOException {
         todo = new TodoList();
         crossedOff = new TodoList();
-        scanner = new Scanner(System.in);
         todoMap = new HashMap<>();
         user = new User();
         todo.addUser(user);
+        loadAtStart();
     }
 
-    public void addItem(Item item) {
-        todo.addItem(item);
+    public void addRegularItem() {
+        new AddRegularItemGUI(todo);
+    }
+
+    public void addUrgentItem() {
+        new AddUrgentItemGUI(todo);
     }
 
     //EFFECTS: sets and adds an item if the list is not full, otherwise add to
@@ -65,10 +71,7 @@ public class TodoListManager {
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
     public void move() {
-        System.out.println("Which item would you like to cross off (enter its keyword)?");
-        scanner.nextLine();
-        String removing = scanner.nextLine();
-        crossedOff.moveItem(removing,todoMap,todo);
+        new MoveItemGUI(crossedOff,todoMap,todo);
         printLists();
     }
 
