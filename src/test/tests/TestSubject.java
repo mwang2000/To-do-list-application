@@ -24,13 +24,13 @@ public class TestSubject {
         observer2 = new User();
     }
 
-    @Test
-    public void testAddObserver() {
-        todoList.addObserver(observer);
-        assertTrue(todoList.observers.contains(observer));
-        assertEquals(1,todoList.observers.size());
-        todoList.addObserver(observer);
-        assertTrue(todoList.observers.contains(observer));
-        assertEquals(1,todoList.observers.size());
-    }
+//    @Test
+//    public void testAddObserver() {
+//        todoList.addObserver(observer);
+//        assertTrue(todoList.observers.contains(observer));
+//        assertEquals(1,todoList.observers.size());
+//        todoList.addObserver(observer);
+//        assertTrue(todoList.observers.contains(observer));
+//        assertEquals(1,todoList.observers.size());
+//    }
 }

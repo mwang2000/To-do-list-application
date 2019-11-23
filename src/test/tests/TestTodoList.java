@@ -47,13 +47,13 @@ public class TestTodoList {
         assertEquals(1,todo.listSize());
     }
 
-    @Test
-    public void testAddUser() {
-        todo.addUser(user);
-        assertTrue(todo.users.contains(user));
-        assertTrue(todo.observers.contains(user));
-        assertEquals(todo,user.todo);
-    }
+//    @Test
+//    public void testAddUser() {
+//        todo.addUser(user);
+//        assertTrue(todo.users.contains(user));
+//        assertTrue(todo.observers.contains(user));
+//        assertEquals(todo,user.todo);
+//    }
 
 //    @Test
 //    public void testAddExamPrepRegular() {

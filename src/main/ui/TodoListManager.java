@@ -8,6 +8,8 @@ import ui.gui.AddRegularItemGUI;
 import ui.gui.AddUrgentItemGUI;
 import ui.gui.MoveItemGUI;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,8 +27,9 @@ public class TodoListManager {
         crossedOff = new TodoList();
         todoMap = new HashMap<>();
         user = new User();
-        todo.addUser(user);
+//        todo.addUser(user);
         loadAtStart();
+
     }
 
     public void addRegularItem() {
@@ -72,13 +75,20 @@ public class TodoListManager {
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
     public void move() {
         new MoveItemGUI(crossedOff,todoMap,todo);
-        printLists();
     }
 
     // EFFECTS: prints both lists
-    public void printLists() {
-        System.out.println(todo.returnTodoList());
-        System.out.println(crossedOff.returnCrossedOffList());
+    public void printLists(JFrame frame) {
+        JTextArea textArea = new JTextArea(todo.returnTodoList());
+        frame.add(textArea);
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 6;
+        c.weighty = 1;
+        c.gridwidth = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        frame.add(textArea,c);
+        frame.setVisible(true);
     }
 
     public void loadAtStart() throws IOException {

@@ -1,5 +1,7 @@
 package ui.gui;
 
+import model.Item;
+import network.Network;
 import ui.TodoListManager;
 
 import javax.swing.*;
@@ -10,6 +12,8 @@ import java.io.IOException;
 
 public class MainGUI extends JFrame implements ActionListener {
     TodoListManager todoListManager = new TodoListManager();
+    JList<Item> todoList;
+    JLabel weather;
     JButton choice1;
     JButton choice2;
     JButton choice3;
@@ -20,7 +24,7 @@ public class MainGUI extends JFrame implements ActionListener {
         super("ToDoList");
         Font titleFont = new Font("Arial", Font.PLAIN, 30);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 1000);
+        setSize(1500, 1000);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -87,6 +91,13 @@ public class MainGUI extends JFrame implements ActionListener {
         add(choice5,c);
         choice5.addActionListener(this);
 
+        weather = new JLabel("<html>" + Network.printWebPage() + "</html>");
+        weather.setFont(new Font("Arial",Font.PLAIN, 20));
+        c.gridx = 4;
+        c.gridy = 0;
+        c.weightx = 1;
+        add(weather,c);
+
         setVisible(true);
     }
 
@@ -99,7 +110,7 @@ public class MainGUI extends JFrame implements ActionListener {
         } else if (e.getSource() == choice3) {
             todoListManager.move();
         } else if (e.getSource() == choice4) {
-            todoListManager.printLists();
+            todoListManager.printLists(this);
         } else {
             todoListManager.saveAtEnd();
             this.dispose();

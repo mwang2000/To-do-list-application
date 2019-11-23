@@ -11,8 +11,6 @@ public abstract class Item {
     protected String task;
     protected LocalDate dueDate;
     protected String status;
-//    protected TodoList onList;
-
 
     // MODIFIES: this
     // EFFECTS: creates an entry with number of 0 and takes a string as a parameter which becomes the item
@@ -20,7 +18,6 @@ public abstract class Item {
         this.keyword = "";
         this.task = "";
         this.status = "not done";
-//        this.onList = new TodoList();
     }
 
     public Item(String keyword, String task, int y, int m, int d) {
@@ -88,20 +85,6 @@ public abstract class Item {
         return task + " due:" + dueDate + " " + status;
     }
 
-//    public void addList(TodoList t) {
-//        if (!(onList == t)) {
-//            onList = t;
-//            t.addExamPrep(this);
-//        }
-//    }
-
-//    public void removeList(TodoList t) {
-//        if (onList == t) {
-//            onList = emptyList;
-//            t.removeExamPrep(this);
-//        }
-//    }
-
 //    public String returnNumberOfItemsLeft() {
 //        String print = "";
 //        print = print + "by crossing off this item, you have " + (TodoList.examPrep.size() - 1)
@@ -131,7 +114,7 @@ public abstract class Item {
 
     // EFFECTS: prints a string combined with another string
     public String printItemHelper(int number,String addOn) {
-        String print = number + "." + todoGetItem() + addOn;
+        String print = number + "." + todoGetItem() + " " + addOn;
         return print;
     }
 

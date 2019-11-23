@@ -11,28 +11,44 @@ import java.net.URL;
 
 // from deliverable 10 instructions
 public class Network {
-    public static void printWebPage() {
+    private static String string;
+    public static String printWebPage() {
         BufferedReader br = null;
         try {
             URL url = new URL("https://api.openweathermap.org/data/2.5/weather?q=Vancouver,ca&APPID="
                     + "3ca388d3cefa876a0952d3886830e2d9");
             br = new BufferedReader(new InputStreamReader(url.openStream()));
             String line;
-            String string = "";
+            string = "";
             while ((line = br.readLine()) != null) {
                 string = string + line + System.lineSeparator();
             }
-            System.out.println("Weather in Vancouver:\n" + User.parseString(string));
+            string = "Weather in Vancouver:\n" + parseString(string);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            finishReader(br);
+            return string;
+        }
+    }
+
+    public static void finishReader(BufferedReader br) {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+
+    public static String parseString(String sb) {
+        JSONObject obj = new JSONObject(sb);
+        String temperature = "temperature: " + obj.getJSONObject("main").getInt("temp") + "K";
+        String humidity = "humidity: " + obj.getJSONObject("main").getInt("humidity") + "%";
+        String minTemp = "low of: " + obj.getJSONObject("main").getInt("temp_min") + "K";
+        String maxTemp = "high of: " + obj.getJSONObject("main").getInt("temp_max") + "K";
+        return "<html><BR>" + temperature + "<BR>" + humidity + "<BR>" + minTemp + "<BR>" + maxTemp + "</html>";
     }
 }

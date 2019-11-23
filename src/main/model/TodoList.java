@@ -13,11 +13,9 @@ import java.util.*;
 
 public class TodoList extends Subject implements Saveable,Loadable {
     private ArrayList<Item> list;
-    public List<User> users;
 
     public TodoList() {
         list = new ArrayList<>();
-        users = new ArrayList<>();
     }
 
     // MODIFIES: this
@@ -49,28 +47,11 @@ public class TodoList extends Subject implements Saveable,Loadable {
 
     // MODIFIES: this, user
     // EFFECTS: adds a user to users and adds this to the given user's todo list
-    public void addUser(User user) {
-        if (!users.contains(user)) {
-            users.add(user);
-            addObserver(user);
-            user.addTodo(this);
-        }
-    }
-
-//    public void addExamPrep(Item i) {
-//        if (!list.contains(i)) {
-//            if (i instanceof UrgentItem) {
-//                Item e = new UrgentItem();
-//                e.setTask(i.getTask());
-//                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
-//                list.add(e);
-//            } else {
-//                Item e = new RegularItem();
-//                e.setTask(i.getTask());
-//                e.setDue(i.getDue().getYear(), i.getDue().getMonthValue(), i.getDue().getDayOfMonth());
-//                list.add(e);
-//            }
-//            i.addList(this);
+//    public void addUser(User user) {
+//        if (!users.contains(user)) {
+//            users.add(user);
+//            addObserver(user);
+//            user.addTodo(this);
 //        }
 //    }
 
