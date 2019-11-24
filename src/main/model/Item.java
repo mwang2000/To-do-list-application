@@ -60,6 +60,10 @@ public abstract class Item {
         return dueDate;
     }
 
+    public TodoList getList() {
+        return list;
+    }
+
     public void addList(TodoList list) {
         if (this.list == null) {
             this.list = list;

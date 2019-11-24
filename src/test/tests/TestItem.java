@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +37,16 @@ public class TestItem {
     }
 
     @Test
+    public void testConstructor2() {
+        Item i = new UrgentItem("abc",2019,12,25);
+        assertEquals("abc",i.getTask());
+        assertEquals(2019,i.getDue().getYear());
+        assertEquals(12,i.getDue().getMonthValue());
+        assertEquals(25,i.getDue().getDayOfMonth());
+        assertEquals("not done",i.getStatus());
+    }
+
+    @Test
     public void testSetItem() {
         testTodo.addItem(entry);
         testTodo.addItem(entry2);
@@ -51,6 +62,13 @@ public class TestItem {
         entry2.setStatus("not done");
         assertEquals("done", entry.getStatus());
         assertEquals("not done", entry2.getStatus());
+    }
+
+    @Test
+    public void testAddListNotNull() {
+        entry.addList(new TodoList());
+        entry.addList(testTodo);
+        assertEquals(testTodo,entry.getList());
     }
 
     @Test
@@ -144,29 +162,40 @@ public class TestItem {
         assertEquals("2_def_2019_10_10_not done_This item is overdue!", Item.saveTodo(entry2));
     }
 
-//    @Test
-//    public void testEqualsTrue() {
-//        Item entry3 = new RegularItem();
-//        entry3.setTask("abc");
-//        entry3.setDue(2019,12,31);
-//        assertEquals(entry, entry3);
-//    }
+    @Test
+    public void testRetrieveItemFields() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("abc");
+        list.add("2019");
+        list.add("12");
+        list.add("31");
+        list.add("not done");
+        assertEquals(entry,entry.retrieveItemFields(list,new RegularItem()));
+    }
+
+    @Test
+    public void testEqualsTrue() {
+        Item entry3 = new RegularItem();
+        entry3.setTask("abc");
+        entry3.setDue(2019,12,31);;
+        assertEquals(entry, entry3);
+    }
 
     @Test
     public void testEqualsFalse() {
         assertNotEquals(entry, entry2);
     }
 
-//    @Test
-//    public void testHashCodeMatch() {
-//        Item entry3 = new RegularItem();
-//        entry3.setTask("abc");
-//        entry3.setDue(2019,12,31);
-//        assertEquals(entry.hashCode(),entry3.hashCode());
-//    }
+    @Test
+    public void testHashCodeMatch() {
+        Item entry3 = new RegularItem();
+        entry3.setTask("abc");
+        entry3.setDue(2019,12,31);
+        assertEquals(entry.hashCode(),entry3.hashCode());
+    }
 
-//    @Test
-//    public void testHashCodeDifferent() {
-//        assertFalse(entry.hashCode() == entry2.hashCode());
-//    }
+    @Test
+    public void testHashCodeDifferent() {
+        assertFalse(entry.hashCode() == entry2.hashCode());
+    }
 }
