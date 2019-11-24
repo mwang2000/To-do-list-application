@@ -3,41 +3,41 @@ package ui;
 import exceptions.TooManyThingsToDoException;
 import model.Item;
 import model.TodoList;
-import model.User;
-import ui.gui.AddRegularItemGUI;
-import ui.gui.AddUrgentItemGUI;
-import ui.gui.MoveItemGUI;
+import ui.gui.AddItemGUI;
+import ui.gui.TodoListsGUI;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 
 public class TodoListManager {
     public TodoList todo;
     public TodoList crossedOff;
-    public Map<String, Item> todoMap;
-    private User user;
+    public TodoListsGUI listGUI;
+    private int maxTodoSize = 5;
 
-    public TodoListManager() throws IOException {
+    public TodoListManager(JFrame frame) {
         todo = new TodoList();
+        todo = todo.load();
         crossedOff = new TodoList();
-        todoMap = new HashMap<>();
-        user = new User();
-//        todo.addUser(user);
-        loadAtStart();
-
+        listGUI = new TodoListsGUI(todo,crossedOff,frame);
+        todo.addObserver(listGUI);
     }
 
-    public void addRegularItem() {
-        new AddRegularItemGUI(todo);
+    public void addItem(Item item) throws TooManyThingsToDoException {
+        if (todo.listSize() == maxTodoSize) {
+            throw new TooManyThingsToDoException();
+        } else {
+            new AddItemGUI(todo,item);
+        }
     }
 
-    public void addUrgentItem() {
-        new AddUrgentItemGUI(todo);
+    public TodoList getTodo() {
+        return todo;
+    }
+
+    public TodoListsGUI getListGUI() {
+        return listGUI;
     }
 
     //EFFECTS: sets and adds an item if the list is not full, otherwise add to
@@ -74,31 +74,14 @@ public class TodoListManager {
     //MODIFIES: this
     //EFFECTS: moves the selected item from the todo list to the crossedOff list
     public void move() {
-        new MoveItemGUI(crossedOff,todoMap,todo);
-    }
-
-    // EFFECTS: prints both lists
-    public void printLists(JFrame frame) {
-        JTextArea textArea = new JTextArea(todo.returnTodoList());
-        frame.add(textArea);
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 6;
-        c.weighty = 1;
-        c.gridwidth = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        frame.add(textArea,c);
-        frame.setVisible(true);
-    }
-
-    public void loadAtStart() throws IOException {
-        todoMap = todo.load(todoMap);
-        todo.updateTodo(todoMap);
+        Item item = (Item) listGUI.getList().getSelectedValue();
+        todo.moveItem(item,crossedOff);
+        listGUI.getTextArea().setText(crossedOff.returnCrossedOffList());
     }
 
     public void saveAtEnd() {
         try {
-            todo.save(todoMap);
+            todo.save();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

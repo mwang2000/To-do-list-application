@@ -1,17 +1,14 @@
 package network;
 
-import jdk.nashorn.internal.parser.JSONParser;
-
 import java.io.*;
 
-import model.User;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import java.net.URL;
 
 // from deliverable 10 instructions
 public class Network {
     private static String string;
+
     public static String printWebPage() {
         BufferedReader br = null;
         try {
@@ -45,10 +42,10 @@ public class Network {
 
     public static String parseString(String sb) {
         JSONObject obj = new JSONObject(sb);
-        String temperature = "temperature: " + obj.getJSONObject("main").getInt("temp") + "K";
+        String temperature = "temperature: " + (obj.getJSONObject("main").getInt("temp") - 273) + "°C";
         String humidity = "humidity: " + obj.getJSONObject("main").getInt("humidity") + "%";
-        String minTemp = "low of: " + obj.getJSONObject("main").getInt("temp_min") + "K";
-        String maxTemp = "high of: " + obj.getJSONObject("main").getInt("temp_max") + "K";
+        String minTemp = "low of: " + (obj.getJSONObject("main").getInt("temp_min") - 273) + "°C";
+        String maxTemp = "high of: " + (obj.getJSONObject("main").getInt("temp_max") - 273) + "°C";
         return "<html><BR>" + temperature + "<BR>" + humidity + "<BR>" + minTemp + "<BR>" + maxTemp + "</html>";
     }
 }

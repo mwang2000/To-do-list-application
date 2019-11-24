@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public interface Saveable {
-    void save(Map<String,Item> map) throws IOException;
+    void save() throws IOException;
 }
 
 

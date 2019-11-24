@@ -20,10 +20,8 @@ public class TestItem {
     public void runBefore() {
         entry = new RegularItem();
         entry.setTask("abc");
-        entry.setKeyword("a");
         entry.setDue(2019,12,31);
         entry2 = new UrgentItem();
-        entry2.setKeyword("d");
         entry2.setDue(2020,1,1);
         entry2.setTask("def");
         testTodo = new TodoList();
@@ -33,7 +31,6 @@ public class TestItem {
     public void testConstructor() {
         Item i = new RegularItem();
         assertEquals("",i.getTask());
-        assertEquals("",i.getKeyword());
         assertEquals("not done",i.getStatus());
 //        assertEquals(null,i.getList());
     }
@@ -85,7 +82,7 @@ public class TestItem {
 
     @Test
     public void testTodoGetItem() {
-        assertEquals("2. def due:2020-01-01 not done Keyword: d", entry2.todoGetItem());
+        assertEquals("2. def due:2020-01-01 not done Keyword: d", entry2.toString());
     }
 
     @Test
@@ -93,11 +90,6 @@ public class TestItem {
         assertEquals("abc due:2019-12-31 not done",entry.crossedOffGetItem());
     }
 
-    @Test
-    public void testSetKeyword() {
-        entry.setKeyword("hello");
-        assertEquals("hello",entry.getKeyword());
-    }
 
 //    @Test
 //    public void testAddList() {

@@ -10,8 +10,8 @@ public class UrgentItem extends Item {
         super();
     }
 
-    public UrgentItem(String keyword, String task, int y, int m, int d) {
-        super(keyword, task, y, m, d);
+    public UrgentItem(String task, int y, int m, int d) {
+        super(task, y, m, d);
     }
 
     //EFFECTS: returns a string that states the number of days until due date
@@ -20,7 +20,7 @@ public class UrgentItem extends Item {
         if (difference < 0) {
             throw new OverDueException();
         }
-        return "There are " + difference + " days until this task is due.";
+        return "(There are " + difference + " days until this task is due.)";
     }
 
     // EFFECTS: returns an urgent item to be printed
@@ -33,9 +33,9 @@ public class UrgentItem extends Item {
 //        return print;
 //    }
 
-    public String printUrgentItem(int number) throws OverDueException {
-        return printItemHelper(number,"(" + timeLeft() + ")");
-    }
+//    public String printUrgentItem(int number) throws OverDueException {
+//        return printItemHelper(number,"(" + timeLeft() + ")");
+//    }
 
     //EFFECTS: returns a string to be printed for an overdue item
 //    public String printOverdue(String print) {
@@ -47,7 +47,7 @@ public class UrgentItem extends Item {
 //        return print;
 //    }
 
-    public String printOverdue(int number) {
-        return printItemHelper(number,"\nThis item is overdue!");
-    }
+//    public String printOverdue(int number) {
+//        return printItemHelper(number,"\nThis item is overdue!");
+//    }
 }
