@@ -19,13 +19,15 @@ public class TestItem {
 
     @BeforeEach
     public void runBefore() {
+        testTodo = new TodoList();
         entry = new RegularItem();
         entry.setTask("abc");
         entry.setDue(2019,12,31);
+        entry.addList(testTodo);
         entry2 = new UrgentItem();
         entry2.setDue(2020,1,1);
         entry2.setTask("def");
-        testTodo = new TodoList();
+        entry2.addList(testTodo);
     }
 
     @Test
@@ -67,7 +69,6 @@ public class TestItem {
     @Test
     public void testAddListNotNull() {
         entry.addList(new TodoList());
-        entry.addList(testTodo);
         assertEquals(testTodo,entry.getList());
     }
 
@@ -100,7 +101,8 @@ public class TestItem {
 
     @Test
     public void testTodoGetItem() {
-        assertEquals("2. def due:2020-01-01 not done Keyword: d", entry2.toString());
+        assertEquals("2.def due:2020-01-01 not done (There are 38 days until this task is due.)",
+                entry2.toString());
     }
 
     @Test
@@ -108,6 +110,23 @@ public class TestItem {
         assertEquals("abc due:2019-12-31 not done",entry.crossedOffGetItem());
     }
 
+    @Test
+    public void testToStringRegular() {
+        assertEquals("1.abc due:2019-12-31 not done ",entry.toString());
+    }
+
+    @Test
+    public void testToStringUrgent() {
+        assertEquals("2.def due:2020-01-01 not done (There are 38 days until this task is due.)",
+                entry2.toString());
+    }
+
+    @Test
+    public void testToStringOverdue() {
+        UrgentItem item = new UrgentItem("xyz",2019,10,31);
+        item.addList(testTodo);
+        assertEquals("3.xyz due:2019-10-31 not done  (This item is overdue!)",item.toString());
+    }
 
 //    @Test
 //    public void testAddList() {
@@ -147,19 +166,24 @@ public class TestItem {
 
     @Test
     public void testSaveTodoRegular() {
-        assertEquals("1_abc_2019_12_31_not done",Item.saveTodo(entry));
+        assertEquals("abc_2019_12_31_not done",Item.saveTodo(entry));
     }
 
     @Test
     public void testSaveTodoUrgent() {
-        assertEquals("2_def_2020_1_1_not done_There are 58 days until this task is due.",
+        assertEquals("def_2020_1_1_not done_(There are 38 days until this task is due.)",
                 Item.saveTodo(entry2));
     }
 
     @Test
     public void testSaveTodoUrgentOverdue() {
         entry2.setDue(2019,10,10);
-        assertEquals("2_def_2019_10_10_not done_This item is overdue!", Item.saveTodo(entry2));
+        assertEquals("def_2019_10_10_not done_This item is overdue!", Item.saveTodo(entry2));
+    }
+
+    @Test
+    public void testPrintItemHelper() {
+        assertEquals("1.abc due:2019-12-31 not done ",entry.printItemHelper(""));
     }
 
     @Test
