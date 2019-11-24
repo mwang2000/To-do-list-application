@@ -106,6 +106,11 @@ public class TestItem {
     }
 
     @Test
+    public void testGetList() {
+        assertEquals(testTodo,entry2.getList());
+    }
+
+    @Test
     public void testCrossedOffGetItem() {
         assertEquals("abc due:2019-12-31 not done",entry.crossedOffGetItem());
     }
@@ -113,6 +118,11 @@ public class TestItem {
     @Test
     public void testToStringRegular() {
         assertEquals("1.abc due:2019-12-31 not done ",entry.toString());
+    }
+
+    @Test
+    public void testListContains() {
+
     }
 
     @Test

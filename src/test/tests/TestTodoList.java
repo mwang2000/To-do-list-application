@@ -17,70 +17,34 @@ public class TestTodoList {
     private RegularItem entry;
     private RegularItem entry2;
     private UrgentItem entry3;
-    private Map<String,Item> todoMap;
 
     @BeforeEach
     public void runBefore() {
+        crossedOff = new TodoList();
+        todo = new TodoList();
         entry = new RegularItem();
         entry.setTask("abc");
         entry.setDue(2019,12,31);
         entry.setStatus("not done");
+        entry.addList(todo);
         entry2 = new RegularItem();
         entry2.setTask("def");
         entry3 = new UrgentItem();
         entry3.setTask("ghi");
         entry3.setDue(2019,12,1);
-        crossedOff = new TodoList();
-        todoMap = new HashMap<>();
-        todoMap.put("a",entry);
-        todo = new TodoList();
     }
 
-
-//    @Test
-//    public void testAddUser() {
-//        todo.addUser(user);
-//        assertTrue(todo.users.contains(user));
-//        assertTrue(todo.observers.contains(user));
-//        assertEquals(todo,user.todo);
-//    }
-
-//    @Test
-//    public void testAddExamPrepRegular() {
-//        Item e = new RegularItem();
-//        e.setTask(entry.getTask());
-//        e.setDue(entry.getDue().getYear(), entry.getDue().getMonthValue(), entry.getDue().getDayOfMonth());
-//        examPrep.addExamPrep(entry);
-//        assertTrue(TodoList.examPrep.contains(entry));
-//        assertTrue(entry.getList().equals(examPrep));
-//        assertEquals(1, TodoList.examPrep.size());
-//    }
-
-//    @Test
-//    public void testAddExamPrepUrgent() {
-//        Item i = new UrgentItem();
-//        i.setTask(entry3.getTask());
-//        i.setDue(entry3.getDue().getYear(),entry3.getDue().getMonthValue(),entry3.getDue().getDayOfMonth());
-//        examPrep.addExamPrep(entry3);
-//        assertTrue(TodoList.examPrep.contains(entry3));
-//        assertTrue(entry3.getList().equals(examPrep));
-//        assertEquals(1, TodoList.examPrep.size());
-//    }
-//
-//    @Test
-//    public void testAddExamPrepAlreadyIncluded() {
-//        TodoList.examPrep.add(entry);
-//        examPrep.addExamPrep(entry);
-//        assertTrue(TodoList.examPrep.contains(entry));
-//        assertEquals(1, TodoList.examPrep.size());
-//    }
+    @Test
+    public void testGetList() {
+        assertTrue(todo.getList().contains(entry));
+    }
 
     @Test
-    public void testMoveItemEmptyCrossedOff() throws IOException {
+    public void testMoveItemEmptyCrossedOff() {
         todo.addItem(entry);
         todo.addItem(entry2);
         todo.addItem(entry3);
-        crossedOff.moveItem(entry,todo);
+        todo.moveItem(entry,crossedOff);
         assertEquals(2, todo.listSize());
         assertTrue(todo.listContains(entry2));
         assertEquals(1, crossedOff.listSize());
@@ -88,11 +52,11 @@ public class TestTodoList {
     }
 
     @Test
-    public void testMoveItemNotEmptyCrossedOff() throws IOException {
+    public void testMoveItemNotEmptyCrossedOff() {
         todo.addItem(entry);
         todo.addItem(entry2);
         crossedOff.addItem(entry3);
-        crossedOff.moveItem(entry2,todo);
+        todo.moveItem(entry2,crossedOff);
         assertEquals(1, todo.listSize());
         assertTrue(todo.listContains(entry));
         assertEquals(2, crossedOff.listSize());
@@ -151,7 +115,7 @@ public class TestTodoList {
         entry3.setStatus("done");
         entry.setDue(2019,10,31);
         entry3.setDue(2019,10,10);
-        assertEquals("\nThe crossed off list is\nabc due:2019-10-31 done\nghi due:2019-10-10 done",
+        assertEquals("The crossed off list is\nabc due:2019-10-31 done\nghi due:2019-10-10 done",
                 crossedOff.returnCrossedOffList());
     }
 
@@ -184,16 +148,16 @@ public class TestTodoList {
 
     @Test
     void testSaveLoadUrgent() throws IOException {
-        todoMap.put("b",entry3);
+        todo.addItem(entry3);
         todo.save();
-        assertEquals(todoMap,todo.load());
+        assertTrue(todo.load().listContains(entry3));
     }
 
     @Test
     void testSaveLoadRegular() throws IOException {
-        todoMap.put("a",entry);
+        todo.addItem(entry);
         todo.save();
-        assertEquals(todoMap,todo.load());
+        assertTrue(todo.load().listContains(entry));
     }
 
 //    @Test
@@ -213,8 +177,6 @@ public class TestTodoList {
     @Test
     public void testRetrieveItemFields() {
         ArrayList<String> partsOfLine = new ArrayList<>();
-        partsOfLine.add("a");
-        partsOfLine.add("0");
         partsOfLine.add("abc");
         partsOfLine.add("2019");
         partsOfLine.add("12");
