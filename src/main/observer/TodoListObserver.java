@@ -2,8 +2,7 @@ package observer;
 
 import model.TodoList;
 
-import java.io.IOException;
-
 public interface TodoListObserver {
+    // EFFECTS: changes JList in GUI to be the new TodoList
     void update(TodoList todo);
 }

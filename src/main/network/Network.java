@@ -9,6 +9,8 @@ import java.net.URL;
 public class Network {
     private static String string;
 
+    // MODIFIES: this
+    // EFFECTS: reads from online weather API and returns parts as a string
     public static String printWebPage() {
         BufferedReader br = null;
         try {
@@ -29,7 +31,8 @@ public class Network {
         }
     }
 
-    public static void finishReader(BufferedReader br) {
+    // EFFECTS: closes BufferedReader
+    private static void finishReader(BufferedReader br) {
         if (br != null) {
             try {
                 br.close();
@@ -39,8 +42,9 @@ public class Network {
         }
     }
 
-
-    public static String parseString(String sb) {
+    // REQUIRES: given string is in the format of a JSON file
+    // EFFECTS: parses the given string for temperatures and humidity, and returns the string to be printed for user
+    private static String parseString(String sb) {
         JSONObject obj = new JSONObject(sb);
         String temperature = "temperature: " + (obj.getJSONObject("main").getInt("temp") - 273) + "°C";
         String humidity = "humidity: " + obj.getJSONObject("main").getInt("humidity") + "%";

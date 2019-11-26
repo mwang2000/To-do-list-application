@@ -22,32 +22,4 @@ public class UrgentItem extends Item {
         }
         return "(There are " + difference + " days until this task is due.)";
     }
-
-    // EFFECTS: returns an urgent item to be printed
-//    public String printUrgentItem(String print) throws OverDueException {
-//        if (print.equals("")) {
-//            print = print + todoGetItem() + timeLeft();
-//        } else {
-//            print = print + "\n" + todoGetItem() + timeLeft();
-//        }
-//        return print;
-//    }
-
-//    public String printUrgentItem(int number) throws OverDueException {
-//        return printItemHelper(number,"(" + timeLeft() + ")");
-//    }
-
-    //EFFECTS: returns a string to be printed for an overdue item
-//    public String printOverdue(String print) {
-//        if (print.equals("")) {
-//            print = print + todoGetItem() + "\nThis item is overdue!";
-//        } else {
-//            print = print + "\n" + todoGetItem() + "\nThis item is overdue!";
-//        }
-//        return print;
-//    }
-
-//    public String printOverdue(int number) {
-//        return printItemHelper(number,"\nThis item is overdue!");
-//    }
 }

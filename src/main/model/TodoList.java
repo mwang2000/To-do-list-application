@@ -33,42 +33,20 @@ public class TodoList extends Subject implements Saveable,Loadable {
         return list;
     }
 
-    public int indexOfItem(Item i) {
+    // EFFECTS: returns index of given item in this list
+    int indexOfItem(Item i) {
         return list.indexOf(i);
     }
 
-    // EFFECTS: returns true if list contains given item
+    // EFFECTS: returns true if this list contains given item
     public boolean listContains(Item i) {
         return list.contains(i);
     }
 
-    // EFFECTS: returns size of list
+    // EFFECTS: returns size of this list
     public int listSize() {
         return list.size();
     }
-
-    // EFFECTS: prints the todo list and then the crossed out list
-//    public String returnTodoList() {
-//        if (list.size() == 0) {
-//            return "Nothing in the to do list.\n";
-//        } else {
-//            String print = "The to do list is:\n";
-//            for (Item e : list) {
-//                int number = (list.indexOf(e) + 1);
-//                if (e instanceof UrgentItem) {
-//                    try {
-//                        print = print + ((UrgentItem) e).printUrgentItem(number) + "\n";
-//                    } catch (OverDueException od) {
-//                        print = print + ((UrgentItem) e).printOverdue(number) + "\n";
-//                    }
-//                } else {
-//                    print = print + ((RegularItem) e).printRegularItem(number) + "\n";
-//                }
-//            }
-//            return print;
-//        }
-//    }
-
 
     //EFFECTS: returns the crossed off list as a string to be printed
     public String returnCrossedOffList() {
@@ -83,8 +61,8 @@ public class TodoList extends Subject implements Saveable,Loadable {
         }
     }
 
-    //MODIFIES: todoMap,todo,crossedOff
-    //EFFECTS: moves an item from todoMap and examPrep ,if applicable, to crossedOff and changes the status to "done"
+    //MODIFIES: this
+    //EFFECTS: moves an item from this to another todolist and sets status to done
     public void moveItem(Item item,TodoList crossedOff) {
         list.remove(item);
         item.setStatus("done");
@@ -103,7 +81,7 @@ public class TodoList extends Subject implements Saveable,Loadable {
     }
 
 
-    // EFFECTS: converts strings in file into a hashmap of strings and items
+    // EFFECTS: converts strings in file into a todolist of strings and items
     public TodoList load() {
         List<String> lines = null;
         try {

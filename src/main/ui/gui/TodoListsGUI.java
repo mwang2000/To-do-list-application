@@ -5,12 +5,11 @@ import observer.TodoListObserver;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class TodoListsGUI implements TodoListObserver {
-    JList list = new JList();
-    JTextArea textArea = new JTextArea();
-    GridBagConstraints gridBagConstraints = new GridBagConstraints();
+    private JList list = new JList();
+    private JTextArea textArea = new JTextArea();
+    private GridBagConstraints gridBagConstraints = new GridBagConstraints();
 
     public TodoListsGUI(TodoList todo, TodoList crossedOff, JFrame frame) {
         todo = todo.load();
@@ -42,6 +41,8 @@ public class TodoListsGUI implements TodoListObserver {
     }
 
     @Override
+    // MODIFIES: this
+    // EFFECTS: sets this JList to contain the elements of the given TodoList
     public void update(TodoList todo) {
         list.setListData(todo.getList().toArray());
     }

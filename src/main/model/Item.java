@@ -8,54 +8,42 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class Item {
-    protected String task;
-    protected LocalDate dueDate;
-    protected String status;
+    private String task;
+    LocalDate dueDate;
+    private String status;
     private TodoList list;
 
-    // MODIFIES: this
-    // EFFECTS: creates an entry with number of 0 and takes a string as a parameter which becomes the item
-    public Item() {
+    Item() {
         this.task = "";
         this.status = "not done";
     }
 
-    public Item(String task, int y, int m, int d) throws NumberFormatException {
+    Item(String task, int y, int m, int d) throws NumberFormatException {
         this.task = task;
         this.dueDate = LocalDate.of(y,m,d);
         this.status = "not done";
     }
 
-    // MODIFIES: this
-    // EFFECTS: sets the item of the entry to the given string
     public void setTask(String task) {
         this.task = task;
     }
 
-    // MODIFIES: this
-    // EFFECTS: sets the status of the entry to the given string
     public void setStatus(String status) {
         this.status = status;
     }
 
-    // REQUIRES: the date given is not in the past
-    // MODIFIES: this
-    // EFFECTS: sets the due date of the entry to the user input
     public void setDue(int y, int m, int d) {
         this.dueDate = LocalDate.of(y,m,d);
     }
 
-    // EFFECTS: returns the item of the entry it is called on
     public String getTask() {
         return task;
     }
 
-    // EFFECTS: returns the status of the entry it is called on
     public String getStatus() {
         return status;
     }
 
-    // EFFECTS: returns the due date of the entry
     public LocalDate getDue() {
         return dueDate;
     }
@@ -64,6 +52,9 @@ public abstract class Item {
         return list;
     }
 
+    // MODIFIES: this
+    // EFFECTS: if this is not assigned to a list, adds given list to the list field calls the method that adds this to
+    // the list
     public void addList(TodoList list) {
         if (this.list == null) {
             this.list = list;
@@ -72,8 +63,7 @@ public abstract class Item {
     }
 
     @Override
-    // REQUIRES: the entry is in the todo list
-    // EFFECTS: returns the number and item of the entry
+    // EFFECTS: returns the string to be displayed for the item
     public String toString() {
         if (this instanceof RegularItem) {
             return printItemHelper("");
@@ -91,13 +81,6 @@ public abstract class Item {
     public String crossedOffGetItem() {
         return task + " due:" + dueDate + " " + status;
     }
-
-//    public String returnNumberOfItemsLeft() {
-//        String print = "";
-//        print = print + "by crossing off this item, you have " + (TodoList.examPrep.size() - 1)
-//                + " items in the exam prep list";
-//        return print;
-//    }
 
     // EFFECTS: prints all the properties of an item
     public static String saveTodo(Item i) {
@@ -121,8 +104,7 @@ public abstract class Item {
 
     // EFFECTS: prints a string combined with another string
     public String printItemHelper(String addOn) {
-        String print = (list.indexOfItem(this) + 1) + "." + task + " due:" + dueDate + " " + status + " " + addOn;
-        return print;
+        return (list.indexOfItem(this) + 1) + "." + task + " due:" + dueDate + " " + status + " " + addOn;
     }
 
     // MODIFIES: this
@@ -136,6 +118,7 @@ public abstract class Item {
     }
 
     @Override
+    // EFFECTS: make two items that have the same task, due date, and status equal
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -149,6 +132,7 @@ public abstract class Item {
     }
 
     @Override
+    // EFFECTS: returns hashcode of item
     public int hashCode() {
         return Objects.hash(task, dueDate, status);
     }

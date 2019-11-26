@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTodoList {
+class TestTodoList {
     private TodoList todo;
     private TodoList crossedOff;
     private RegularItem entry;
@@ -19,7 +19,7 @@ public class TestTodoList {
     private UrgentItem entry3;
 
     @BeforeEach
-    public void runBefore() {
+    void runBefore() {
         crossedOff = new TodoList();
         todo = new TodoList();
         entry = new RegularItem();
@@ -35,12 +35,12 @@ public class TestTodoList {
     }
 
     @Test
-    public void testGetList() {
+    void testGetList() {
         assertTrue(todo.getList().contains(entry));
     }
 
     @Test
-    public void testMoveItemEmptyCrossedOff() {
+    void testMoveItemEmptyCrossedOff() {
         todo.addItem(entry);
         todo.addItem(entry2);
         todo.addItem(entry3);
@@ -52,7 +52,7 @@ public class TestTodoList {
     }
 
     @Test
-    public void testMoveItemNotEmptyCrossedOff() {
+    void testMoveItemNotEmptyCrossedOff() {
         todo.addItem(entry);
         todo.addItem(entry2);
         crossedOff.addItem(entry3);
@@ -63,52 +63,13 @@ public class TestTodoList {
         assertTrue(crossedOff.listContains(entry2));
     }
 
-//    @Test
-//    public void testMoveItemUrgentItem() throws IOException {
-//        todo.addItem();
-//        crossedOff.addItem(entry);
-//        crossedOff.moveItem(todo);
-//        assertEquals(0,todo.listSize());
-//        assertEquals(2,crossedOff.listSize());
-//        assertTrue(crossedOff.listContains(entry3));
-//    }
-
-//    @Test
-//    public void testReturnTodoEmpty() {
-//        assertEquals("Nothing in the to do list.",
-//                todo.returnTodoList());
-//    }
-//
-//    @Test
-//    public void testReturnTodoUrgent() {
-//        todo.addItem(entry3);
-//        entry3.setDue(2019,12,31);
-//        assertEquals("0. ghi due:2019-12-31 not done Keyword: There are 57 days until this task is due.",
-//                todo.returnTodoList());
-//    }
-
-//    @Test
-//    public void testReturnTodoRegular() throws IOException {
-//        todo.addItem(entry);
-//        entry.setDue(2019,12,31);
-//        assertEquals("0. abc due:2019-12-31 not done Keyword: a",todo.returnTodoList());
-//    }
-//
-//    @Test
-//    public void testReturnTodoException() throws IOException {
-//        todo.addItem(entry3);
-//        entry3.setDue(2019,10,10);
-//        assertEquals("0. ghi due:2019-10-10 not done Keyword: \nThis item is overdue!",
-//                todo.returnTodoList());
-//    }
-
     @Test
-    public void testReturnCrossedOffEmpty() {
+    void testReturnCrossedOffEmpty() {
         assertEquals("\nNothing in the crossed off list.",crossedOff.returnCrossedOffList());
     }
 
     @Test
-    public void testReturnCrossedOffMultiple() {
+    void testReturnCrossedOffMultiple() {
         crossedOff.addItem(entry);
         crossedOff.addItem(entry3);
         entry.setStatus("done");
@@ -118,33 +79,6 @@ public class TestTodoList {
         assertEquals("The crossed off list is\nabc due:2019-10-31 done\nghi due:2019-10-10 done",
                 crossedOff.returnCrossedOffList());
     }
-
-//    @Test
-//    public void testReturnExamPrepEmpty() {
-//        assertEquals("\nNothing in the exam prep list.",TodoList.returnExamPrep());
-//    }
-
-//    @Test
-//    public void testReturnExamPrepNotEmpty() {
-//        TodoList.examPrep.add(entry);
-//        TodoList.examPrep.add(entry3);
-//        assertEquals("\nThe exam prep list is:\nabc 2019-12-31\nghi 2019-12-01",TodoList.returnExamPrep());
-//    }
-//
-//    @Test
-//    public void testRemoveExamPrep() {
-//        examPrep.addExamPrep(entry);
-//        examPrep.removeExamPrep(entry);
-//        assertEquals(0,TodoList.examPrep.size());
-//    }
-
-//    @Test
-//    void testLoadTodoUrgent() throws IOException {
-//        todoMap.put("b",entry3);
-//        todo.save(todoMap);
-//        todo.loadToList();
-//        assertTrue(todo.listContains(entry3));
-//    }
 
     @Test
     void testSaveLoadUrgent() throws IOException {
@@ -160,22 +94,8 @@ public class TestTodoList {
         assertTrue(todo.load().listContains(entry));
     }
 
-//    @Test
-//    public void testSaveExamPrep() {
-//        TodoList.examPrep.add(entry);
-//        TodoList.examPrep.add(entry3);
-//        assertEquals("abc_2019_12_31\nghi_2019_12_1",TodoList.saveExamPrep());
-//    }
-//
-//    @Test
-//    public void testSaveExamPrepOverdue() {
-//        TodoList.examPrep.add(entry3);
-//        entry3.setDue(2019,10,10);
-//        assertEquals("ghi_2019_10_10",TodoList.saveExamPrep());
-//    }
-
     @Test
-    public void testRetrieveItemFields() {
+    void testRetrieveItemFields() {
         ArrayList<String> partsOfLine = new ArrayList<>();
         partsOfLine.add("abc");
         partsOfLine.add("2019");
@@ -193,7 +113,7 @@ public class TestTodoList {
     }
 
     @Test
-    public void testSplitOnUnderscore() {
+    void testSplitOnUnderscore() {
         ArrayList<String> list = todo.splitOnUnderscore("a_1_abc_2019_12_31_not done");
         assertEquals(7,list.size());
         assertTrue(list.contains("a"));

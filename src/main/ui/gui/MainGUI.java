@@ -13,12 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainGUI extends JFrame implements ActionListener {
-    TodoListManager todoListManager;
-    JLabel weather;
-    JButton choice1;
-    JButton choice2;
-    JButton choice3;
-    JButton choice4;
+    private TodoListManager todoListManager;
+    private JButton choice1;
+    private JButton choice2;
+    private JButton choice3;
 
     public MainGUI() {
         super("ToDoList");
@@ -55,8 +53,7 @@ public class MainGUI extends JFrame implements ActionListener {
         c.gridx = 0;
         c.gridy = 3;
         c.gridheight = 1;
-        Insets i = new Insets(5,5,5,5);
-        c.insets = i;
+        c.insets = new Insets(5,5,5,5);
         c.fill = GridBagConstraints.BOTH;
         add(choice1,c);
         choice1.addActionListener(this);
@@ -79,7 +76,7 @@ public class MainGUI extends JFrame implements ActionListener {
         add(choice3,c);
         choice3.addActionListener(this);
 
-        choice4 = new JButton("Save and exit");
+        JButton choice4 = new JButton("Save and exit");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridwidth = 3;
         c.gridx = 0;
@@ -88,7 +85,7 @@ public class MainGUI extends JFrame implements ActionListener {
         add(choice4,c);
         choice4.addActionListener(this);
 
-        weather = new JLabel("<html>" + Network.printWebPage() + "</html>");
+        JLabel weather = new JLabel("<html>" + Network.printWebPage() + "</html>");
         weather.setFont(new Font("Arial",Font.PLAIN, 20));
         c.gridx = 4;
         c.gridy = 0;
@@ -99,6 +96,9 @@ public class MainGUI extends JFrame implements ActionListener {
     }
 
     @Override
+    // EFFECTS: if choice1 is clicked, creates new RegularItem and adds it to todo; if choice2 is clicked, creates new
+    // UrgentItem and adds it to todo; if choice3 is clicked, the selected item is moved from todo to crossedOff; if
+    // choice4 is clicked, todo is saved and the GUI is closed
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == choice1) {
             RegularItem item = new RegularItem();
@@ -114,7 +114,10 @@ public class MainGUI extends JFrame implements ActionListener {
         }
     }
 
-    public void newItemHelper(Item item) {
+    // MODIFIES: this
+    // EFFECTS: passes given item to a method that sets its fields and adds it to todo if todo is not full; else makes
+    // a popup window with an error message
+    private void newItemHelper(Item item) {
         try {
             todoListManager.addItem(item);
         } catch (TooManyThingsToDoException ex) {

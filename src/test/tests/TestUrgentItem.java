@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class TestUrgentItem {
+class TestUrgentItem {
     private UrgentItem entry;
     private UrgentItem entry2;
 
     @BeforeEach
-    public void runBefore() {
+    void runBefore() {
         entry = new UrgentItem();
         entry.setTask("abc");
         entry.setDue(2019,1,1);
@@ -23,12 +23,12 @@ public class TestUrgentItem {
     }
 
     @Test
-    public void testTimeLeft() throws OverDueException {
-        assertEquals("There are 66 days until this task is due.", entry2.timeLeft());
+    void testTimeLeft() throws OverDueException {
+        assertEquals("(There are 37 days until this task is due.)", entry2.timeLeft());
     }
 
     @Test
-    public void testOverDueNoException() {
+    void testOverDueNoException() {
         try{
             entry2.timeLeft();
             System.out.println("pass");
@@ -38,7 +38,7 @@ public class TestUrgentItem {
     }
 
     @Test
-    public void testOverDueException() {
+    void testOverDueException() {
         try{
             entry.timeLeft();
             fail();
@@ -46,34 +46,4 @@ public class TestUrgentItem {
             System.out.println("pass");
         }
     }
-
-//    @Test
-//    public void testPrintOverdueEmpty() {
-//        String print = "";
-//        assertEquals("1. abc due:2019-01-01 not done Keyword: a\nThis item is overdue!",
-//                entry.printOverdue(1));
-//    }
-//
-//    @Test
-//    public void testPrintOverdueNotEmpty() {
-//        String print = "hello";
-//        assertEquals("hello\n1. abc due:2019-01-01 not done Keyword: a\nThis item is overdue!",
-//                entry.printOverdue(1));
-//    }
-
-//    @Test
-//    public void testPrintUrgentItemEmpty() throws OverDueException {
-//        String print = "";
-//        assertEquals("1. def due:2020-01-01 not done Keyword: b\nThere are 66 days until this task is due.",
-//                entry2.printUrgentItem(1));
-//    }
-//
-//    @Test
-//    public void testPrintUrgentItemNotEmpty() throws OverDueException {
-//        String print = "hello";
-//        assertEquals("hello\n1. def due:2020-01-01 not done Keyword: b\n"
-//                + "There are 66 days until this task is due.",
-//                entry2.printUrgentItem(1));
-//    }
-
 }

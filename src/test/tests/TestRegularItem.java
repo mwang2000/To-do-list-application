@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Test;
 import model.RegularItem;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TestRegularItem {
+class TestRegularItem {
     private RegularItem entry;
     private UrgentItem entry2;
 
     @BeforeEach
-    public void runBefore() {
+    void runBefore() {
         entry = new RegularItem();
         entry.setTask("abc");
         entry.setDue(2020,1,1);
@@ -21,15 +22,12 @@ public class TestRegularItem {
         entry2.setDue(2020,12,31);
     }
 
-//    @Test
-//    public void testPrintRegularItemEmpty() {
-//        String print = "";
-//        assertEquals("1.abc due:2020-01-01 not done Keyword: a",entry.printRegularItem(1));
-//    }
-//
-//    @Test
-//    public void testPrintRegularItem() {
-//        String print = "hello";
-//        assertEquals("hello\n1.abc due:2020-01-01 not done Keyword: a",entry.printRegularItem(1));
-//    }
+    @Test
+    void testFirstConstructor() {
+        RegularItem item = new RegularItem();
+        assertEquals("",item.getTask());
+        assertNull(item.getDue());
+        assertEquals("not done", item.getStatus());
+        assertNull(item.getList());
+    }
 }

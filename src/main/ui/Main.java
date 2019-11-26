@@ -2,10 +2,9 @@ package ui;
 
 import ui.gui.MainGUI;
 
-import java.io.IOException;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
+    // EFFECTS: launches the program
+    public static void main(String[] args) {
         new MainGUI();
     }
 }
