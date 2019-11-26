@@ -26,6 +26,7 @@ public class MainGUI extends JFrame implements ActionListener {
         setLayout(new GridBagLayout());
         todoListManager = new TodoListManager(this);
         GridBagConstraints c = new GridBagConstraints();
+        this.setLocationRelativeTo(null);
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel,BoxLayout.PAGE_AXIS));
@@ -35,6 +36,8 @@ public class MainGUI extends JFrame implements ActionListener {
         welcomeMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel question = new JLabel("What would you like to do?",JLabel.CENTER);
         textPanel.add(question);
+        textPanel.setBackground(Color.cyan);
+        textPanel.setOpaque(true);
         c.gridx = 0;
         c.gridy = 0;
         c.weighty = 3;
@@ -56,6 +59,8 @@ public class MainGUI extends JFrame implements ActionListener {
         c.insets = new Insets(5,5,5,5);
         c.fill = GridBagConstraints.BOTH;
         add(choice1,c);
+        choice1.setBackground(Color.BLUE);
+        choice1.setOpaque(true);
         choice1.addActionListener(this);
 
         choice2 = new JButton("Add an urgent to-do list item");
@@ -65,6 +70,8 @@ public class MainGUI extends JFrame implements ActionListener {
         c.gridx = 1;
         c.gridy = 2;
         add(choice2,c);
+        choice2.setBackground(Color.RED);
+        choice2.setOpaque(true);
         choice2.addActionListener(this);
 
         choice3 = new JButton("Cross off selected finished item");
@@ -74,6 +81,8 @@ public class MainGUI extends JFrame implements ActionListener {
         c.gridx = 2;
         c.gridy = 2;
         add(choice3,c);
+        choice3.setBackground(Color.green);
+        choice3.setOpaque(true);
         choice3.addActionListener(this);
 
         JButton choice4 = new JButton("Save and exit");
@@ -83,13 +92,14 @@ public class MainGUI extends JFrame implements ActionListener {
         c.gridy = 4;
         c.fill = GridBagConstraints.BOTH;
         add(choice4,c);
+        choice4.setBackground(Color.yellow);
+        choice4.setOpaque(true);
         choice4.addActionListener(this);
 
         JLabel weather = new JLabel("<html>" + Network.printWebPage() + "</html>");
         weather.setFont(new Font("Arial",Font.PLAIN, 20));
         c.gridx = 4;
         c.gridy = 0;
-        c.weightx = 1;
         add(weather,c);
 
         setVisible(true);
