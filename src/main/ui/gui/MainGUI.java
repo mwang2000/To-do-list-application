@@ -4,7 +4,6 @@ import exceptions.TooManyThingsToDoException;
 import model.Item;
 import model.RegularItem;
 import model.UrgentItem;
-import network.Network;
 import ui.TodoListManager;
 
 import javax.swing.*;
@@ -95,12 +94,6 @@ public class MainGUI extends JFrame implements ActionListener {
         choice4.setBackground(Color.yellow);
         choice4.setOpaque(true);
         choice4.addActionListener(this);
-
-        JLabel weather = new JLabel("<html>" + Network.printWebPage() + "</html>");
-        weather.setFont(new Font("Arial",Font.PLAIN, 20));
-        c.gridx = 4;
-        c.gridy = 0;
-        add(weather,c);
 
         setVisible(true);
     }
